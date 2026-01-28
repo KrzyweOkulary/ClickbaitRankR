@@ -1,13 +1,26 @@
-Package: OSSelectR
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Package: ClickbaitRankR
+Type: Package
+Title: Wielokryterialna Analiza Decyzyjna w Środowisku Rozmytym z BWM
+Version: 0.1.0
+Author: Katarzyna Krzystanek <katarzyna.krzystanek@student.uj.edu.pl>
+Maintainer: Imię Nazwisko <email@student.uj.edu.pl>
+Description: Pakiet implementuje metody MCDA (TOPSIS, VIKOR, WASPAS) w środowisku
+rozmytym (Fuzzy Logic). Zawiera moduł automatycznego przetwarzania danych ankietowych
+na liczby rozmyte oraz solver dla metody Best-Worst Method (BWM) do wyznaczania wag kryteriów.
+License: GPL-3
 Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.0.0
-Imports: 
-    BWM
+LazyData: true
+RoxygenNote: 7.3.1
+Imports:
+Rglpk,
+ggplot2,
+ggrepel,
+RankAggreg,
+stats
+Suggests:
+knitr,
+rmarkdown,
+testthat
+VignetteBuilder: knitr
+Depends:
+R (>= 3.5.0)
