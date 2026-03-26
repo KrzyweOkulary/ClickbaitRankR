@@ -1,0 +1,42 @@
+#' Przykładowe dane do macierzy decyzyjnej ClickbaitRankR
+#'
+#' Zbiór danych zawierający symulowane odpowiedzi ekspertów dla 20 serwisów/artykułów
+#' ocenianych pod kątem rzetelności, manipulacji i cech clickbaitowych.
+#' Zbiór przeznaczony do użycia z funkcją `przygotuj_dane_mcda()`.
+#'
+#' @format Ramka danych (data frame) z 20 wierszami i 25 zmiennymi:
+#' \describe{
+#'   \item{EkspertID}{Identyfikator osoby oceniającej (1-5)}
+#'   \item{Alternatywa}{Identyfikator ocenianego artykułu lub strony (1-20)}
+#'
+#'   \item{koszt_subskrypcji}{Miesięczny koszt dostępu w PLN (19-56)}
+#'   \item{dostep_do_tresci_bez_zalogowania}{Łatwość dostępu bez konta (skala 1-5)}
+#'
+#'   \item{autor_transparentnosc}{Czytelność profilu i bio autora (skala 1-5)}
+#'   \item{autor_ekspertyza}{Doświadczenie autora w temacie (skala 1-5)}
+#'   \item{autor_reputacja}{Ogólna wiarygodność nazwiska autora (skala 1-5)}
+#'
+#'   \item{zrodla_zewnetrzne}{Liczba dni/czas odświeżania źródeł (zmienna ciągła)}
+#'   \item{multimedia_dowodowe}{Procentowa wiarygodność zdjęć/wideo (80-100\%)}
+#'   \item{cytowania_ekspertow}{Waga cytowań: 0 (brak) lub 10 (obecne)}
+#'
+#'   \item{przymiotniki_emocjonalne}{Gęstość emocjonalnego języka (skala Likerta 1-7)}
+#'   \item{zbalansowanie_stron}{Prezentacja różnych punktów widzenia (skala 1-7)}
+#'   \item{neutralnosc_naglowka}{Zgodność tytułu z faktami (1-7), zawiera braki NA}
+#'
+#'   \item{fakt_wyrwanie_z_kontekstue}{Stopień manipulacji kontekstem (skala 1-5)}
+#'   \item{fakt_selektywnosc}{Dobór danych pod tezę (procenty 80-100\%)}
+#'   \item{fakt_anegdotyczny}{Opieranie się na pojedynczych przypadkach (skala 1-5)}
+#'
+#'   \item{wizual_wykres_osie}{Rzetelność prezentacji danych: 0 (poprawne) lub 10 (manipulacja)}
+#'   \item{wizual_zdjecie_kontekst}{Dopasowanie obrazu do treści (skala 1-5)}
+#'   \item{wizual_retusz_sugestywny}{Wykorzystanie filtrów i montażu (skala 1-5)}
+#'
+#'   \item{jezyk_hiperbola}{Częstotliwość przesadnych określeń (skala 1-5)}
+#'   \item{clickbait_luka_informacyjna}{Niedopowiedzenia w tytule (skala 1-5)}
+#'   \item{clickbait_nacechowanie_wartosciujaco}{Język oceniający zamiast opisu (skala 1-5)}
+#'   \item{clickbait_wrogi_jezyk}{Obecność agresji słownej (skala 1-5)}
+#' }
+#' @usage data(mcda_dane_surowe)
+#' @name mcda_dane_surowe
+NULL
