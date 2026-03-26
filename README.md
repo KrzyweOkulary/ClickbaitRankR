@@ -113,3 +113,7 @@ print(meta_res$comparison)
 #> 19          19        8       6        6        7              6
 #> 20          20        7       5        4        5              5
 ```
+
+
+<img width="577" height="557" alt="image" src="https://github.com/user-attachments/assets/3e596c07-7836-494e-b03b-f952f74e1ed9" />
+
