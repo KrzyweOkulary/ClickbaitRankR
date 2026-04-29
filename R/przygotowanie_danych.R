@@ -23,13 +23,13 @@
   return(mapowanie)
 }
 
-#' @title Wewnętrzny Skaler Saaty'ego
+#' @title Wewnętrzne skalowanie do przedziału 1-9
 #' @description Przekształca dowolną skalę (np. Likert 1-5, wartości ciągłe)
-#' na skalę Saaty'ego 1-9.
+#' na wspólną skalę 1-9 używaną w macierzy decyzyjnej.
 #' @keywords internal
-.skaluj_do_saaty <- function(wektor) {
+.skaluj_do_1_9 <- function(wektor) {
   # Zabezpieczenie przed ujemnymi (chyba ze to specyfika danych, tu zakladamy blad)
-  if (any(wektor < 0, na.rm = TRUE)) stop("Wykryto wartości ujemne w danych wejściowych.")
+  if (any(wektor < 0, na.rm = TRUE)) stop("Wykryto wartosci ujemne w danych wejsciowych.")
   
   # Obsluga kodow bledow (np. 99) i brakow danych (NA) -> zamiana na 0
   wektor[is.na(wektor) | wektor == 99] <- 0
@@ -48,7 +48,7 @@
   if (min_v == max_v) {
     wektor[maska_poprawne] <- 1
   } else {
-    # Wzor: 1 + (x - min) * (8 / (max - min))
+    # Wzór: 1 + (x - min) * (8 / (max - min))
     wektor[maska_poprawne] <- 1 + (wartosci - min_v) * (8 / (max_v - min_v))
   }
   return(wektor)
@@ -84,11 +84,11 @@
 #' @param kolumna_alternatyw Nazwa kolumny identyfikującej alternatywy.
 #'        Jeśli NULL, każdy wiersz traktowany jest jako osobna alternatywa.
 #' @param funkcja_agregacji Funkcja używana do scalania opinii ekspertów (domyślnie: mean).
-#' @return Macierz o wymiarach ($m \times 3n$), gdzie m to liczba alternatyw.
+#' @return Macierz o wymiarach `m x 3n`, gdzie `m` to liczba alternatyw.
 #' @export
 przygotuj_dane_mcda <- function(dane, skladnia, kolumna_alternatyw = NULL, funkcja_agregacji = mean) {
   
-  if (!is.data.frame(dane)) stop("Argument 'dane' musi być ramką danych (data frame).")
+  if (!is.data.frame(dane)) stop("Argument 'dane' musi byc ramka danych (data frame).")
   
   # 1. Parsowanie składni
   mapowanie <- .parsuj_skladnie_mcda(skladnia)
@@ -111,7 +111,7 @@ przygotuj_dane_mcda <- function(dane, skladnia, kolumna_alternatyw = NULL, funkc
     }
     
     # Skalowanie do 1-9
-    tymczasowe_wyniki[[kryt]] <- .skaluj_do_saaty(surowy_wynik)
+    tymczasowe_wyniki[[kryt]] <- .skaluj_do_1_9(surowy_wynik)
   }
   
   # 3. Agregacja (Eksperci -> Alternatywy)
@@ -121,7 +121,7 @@ przygotuj_dane_mcda <- function(dane, skladnia, kolumna_alternatyw = NULL, funkc
     tymczasowe_wyniki$ID_Alternatywy <- dane[[kolumna_alternatyw]]
     
     # Agregacja wg ID Alternatywy (np. srednia z ocen 5 ekspertow dla danego dostawcy)
-    dane_zagregowane <- aggregate(. ~ ID_Alternatywy, data = tymczasowe_wyniki[, -1], FUN = funkcja_agregacji)
+    dane_zagregowane <- stats::aggregate(. ~ ID_Alternatywy, data = tymczasowe_wyniki[, -1], FUN = funkcja_agregacji)
     
     # Sortowanie i czyszczenie
     dane_zagregowane <- dane_zagregowane[order(dane_zagregowane$ID_Alternatywy), ]

@@ -2,18 +2,22 @@
 % Please edit documentation in R/wizualizacja.R
 \name{plot.rozmyty_vikor_wynik}
 \alias{plot.rozmyty_vikor_wynik}
-\title{Mapa Strategiczna VIKOR}
+\title{Wykres bąbelkowy VIKOR}
 \usage{
-\method{plot}{rozmyty_vikor_wynik}(x, ...)
+\method{plot}{rozmyty_vikor_wynik}(x, liczba_etykiet = 12, ...)
 }
 \arguments{
 \item{x}{Obiekt klasy `rozmyty_vikor_wynik`.}
 
-\item{...}{Dodatkowe argumenty (ignorowane).}
+\item{liczba_etykiet}{Liczba najlepszych alternatyw podpisywanych na wykresie.}
+
+\item{...}{Dodatkowe argumenty ignorowane przez metodę.}
+}
+\value{
+Obiekt `ggplot`.
 }
 \description{
-Wizualizacja typu cIPMA.
-Oś X: Efektywność grupowa (odwrócone S). Oś Y: Ryzyko/Żal (R).
-Wielkość bąbla: Siła kompromisu (zależna od Q).
-s
+Rysuje główną wizualizację pakietu: mapę kompromisu VIKOR.
+Niższe wartości `S`, `R` i `Q` oznaczają korzystniejszą alternatywę,
+dlatego najlepsze punkty znajdują się bliżej lewego dolnego rogu.
 }

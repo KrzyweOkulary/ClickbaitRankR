@@ -2,11 +2,11 @@
 % Please edit documentation in R/meta_ranking.R
 \name{calculate_dominance_ranking}
 \alias{calculate_dominance_ranking}
-\title{Teoria Dominacji dla Rankingu}
+\title{Ranking dominacyjny}
 \usage{
 calculate_dominance_ranking(rank_mat)
 }
 \description{
-Funkcja pomocnicza do wyznaczania konsensusu.
+Funkcja pomocnicza do wyznaczania konsensusu z kilku rankingów.
 }
 \keyword{internal}

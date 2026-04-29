@@ -6,4 +6,5 @@
 *.tar.gz
 *.Rcheck/
 /inst/doc
-/man/figures/
+/man/figures/*
+!/man/figures/*.png

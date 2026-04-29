@@ -2,18 +2,34 @@
 % Please edit documentation in R/meta_ranking.R
 \name{fuzzy_meta_ranking}
 \alias{fuzzy_meta_ranking}
-\title{Rozmyty Meta-Ranking}
+\title{Rozmyty meta-ranking}
 \usage{
 fuzzy_meta_ranking(
   decision_mat,
   criteria_types,
   weights = NULL,
-  bwm_best = NULL,
-  bwm_worst = NULL,
+  metoda_wag = c("critic", "entropia"),
   lambda = 0.5,
   v = 0.5
 )
 }
+\arguments{
+\item{decision_mat}{Rozmyta macierz decyzyjna w układzie TFN.}
+
+\item{criteria_types}{Wektor `"max"` / `"min"` określający kierunek preferencji kryteriów.}
+
+\item{weights}{Opcjonalny wektor wcześniej obliczonych wag obiektywnych.}
+
+\item{metoda_wag}{Metoda obiektywnego ważenia: `"critic"` albo `"entropia"`.}
+
+\item{lambda}{Parametr metody WASPAS.}
+
+\item{v}{Parametr metody VIKOR.}
+}
+\value{
+Lista z tabelą porównawczą, macierzą korelacji rang oraz użytymi wagami.
+}
 \description{
-Agreguje wyniki z wielu metod MCDA w jeden ranking.
+Agreguje rankingi TOPSIS, VIKOR i WASPAS w jeden ranking porównawczy.
+Wagi są wyznaczane obiektywnie metodą CRITIC albo entropii Shannona.
 }

@@ -1,27 +1,26 @@
 Package: ClickbaitRankR
 Type: Package
-Title: Analiza Clickbaitów w Środowisku Rozmytym z BWM
+Title: Obiektywna Analiza Clickbaitów w Środowisku Rozmytym
 Version: 0.1.0
 Authors@R: person("Kasia", "TwojeNazwisko", 
                   email = "twoj_email@student.uj.edu.pl", 
                   role = c("aut", "cre"))
-Description: Pakiet implementuje metody MCDA (TOPSIS, VIKOR, WASPAS) w środowisku rozmytym (Fuzzy Logic) do oceny manipulacji treścią w sieci. Zawiera moduł automatycznego przetwarzania danych ankietowych na liczby rozmyte oraz solver dla metody Best-Worst Method (BWM) do wyznaczania wag kryteriów.
+Description: Pakiet implementuje metody MCDA (TOPSIS, VIKOR, WASPAS) w środowisku rozmytym do obiektywnej oceny źródeł i artykułów clickbaitowych. Zawiera przetwarzanie danych ankietowych do trójkątnych liczb rozmytych, obiektywne wagi Entropii Shannona i CRITIC oraz główną wizualizację kompromisu VIKOR.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.3
-Imports: 
-    Rglpk,
+Imports:
+    flextable,
     ggplot2,
     ggrepel,
-    RankAggreg,
-    stats,
     rempsyc,
-    flextable
-Suggests: 
+    stats
+Suggests:
     knitr,
     rmarkdown,
     testthat
 VignetteBuilder: knitr
-Depends: 
+Depends:
     R (>= 3.5.0)
+Config/testthat/edition: 3
