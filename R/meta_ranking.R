@@ -1,5 +1,5 @@
-#' @title Teoria Dominacji dla Rankingu
-#' @description Funkcja pomocnicza do wyznaczania konsensusu.
+#' @title Ranking dominacyjny
+#' @description Funkcja pomocnicza do wyznaczania konsensusu z kilku rankingów.
 #' @keywords internal
 calculate_dominance_ranking <- function(rank_mat) {
   n <- nrow(rank_mat)
@@ -24,46 +24,60 @@ calculate_dominance_ranking <- function(rank_mat) {
   return(final_rank)
 }
 
-#' @title Rozmyty Meta-Ranking
-#' @description Agreguje wyniki z wielu metod MCDA w jeden ranking.
+#' Rozmyty meta-ranking
+#'
+#' @description
+#' Agreguje rankingi TOPSIS, VIKOR i WASPAS w jeden ranking porównawczy.
+#' Wagi są wyznaczane obiektywnie metodą CRITIC albo entropii Shannona.
+#'
+#' @param decision_mat Rozmyta macierz decyzyjna w układzie TFN.
+#' @param criteria_types Wektor `"max"` / `"min"` określający kierunek preferencji kryteriów.
+#' @param weights Opcjonalny wektor wcześniej obliczonych wag obiektywnych.
+#' @param metoda_wag Metoda obiektywnego ważenia: `"critic"` albo `"entropia"`.
+#' @param lambda Parametr metody WASPAS.
+#' @param v Parametr metody VIKOR.
+#'
+#' @return Lista z tabelą porównawczą, macierzą korelacji rang oraz użytymi wagami.
 #' @export
-fuzzy_meta_ranking <- function(decision_mat, criteria_types, weights = NULL, 
-                               bwm_best = NULL, bwm_worst = NULL, 
+fuzzy_meta_ranking <- function(decision_mat, criteria_types, weights = NULL,
+                               metoda_wag = c("critic", "entropia"),
                                lambda = 0.5, v = 0.5) {
-  # 1. Przygotowanie wag (jeśli brak, liczona jest Entropia)
-  if (is.null(weights) && (is.null(bwm_best) || is.null(bwm_worst))) {
-    message("Brak wag. Obliczam Entropię Shannona...")
-    weights_raw <- oblicz_wagi_entropii(decision_mat)
-    weights <- rep(weights_raw, each = 3)
+  .sprawdz_macierz_tfn(decision_mat)
+  metoda_wag <- match.arg(metoda_wag)
+
+  # Wagi liczymy raz, aby każda metoda MCDA korzystała z tego samego wektora.
+  if (is.null(weights)) {
+    weights <- switch(
+      metoda_wag,
+      critic = oblicz_wagi_critic(decision_mat, criteria_types),
+      entropia = oblicz_wagi_entropii(decision_mat, criteria_types)
+    )
   }
-  
-  # 2. Uruchomienie metod składowych
-  res_topsis <- rozmyty_topsis(decision_mat, criteria_types, weights, 
-                               bwm_najlepsze = bwm_best, bwm_najgorsze = bwm_worst)
-  res_vikor <- rozmyty_vikor(decision_mat, criteria_types, v, weights, 
-                             bwm_najlepsze = bwm_best, bwm_najgorsze = bwm_worst)
-  res_waspas <- rozmyty_waspas(decision_mat, criteria_types, lambda, weights, 
-                               bwm_najlepsze = bwm_best, bwm_najgorsze = bwm_worst)
-  
-  # 3. Zestawienie rankingów
-  rank_matrix <- cbind(res_topsis$wyniki$Ranking, 
-                       res_vikor$wyniki$Ranking, 
+
+  res_topsis <- rozmyty_topsis(decision_mat, criteria_types, wagi = weights)
+  res_vikor <- rozmyty_vikor(decision_mat, criteria_types, v = v, wagi = weights)
+  res_waspas <- rozmyty_waspas(decision_mat, criteria_types, lambda = lambda, wagi = weights)
+
+  rank_matrix <- cbind(res_topsis$wyniki$Ranking,
+                       res_vikor$wyniki$Ranking,
                        res_waspas$wyniki$Ranking)
   colnames(rank_matrix) <- c("TOPSIS", "VIKOR", "WASPAS")
-  
-  # 4. Agregacja (Suma Rang i Teoria Dominacji)
+
   rank_sum <- rank(rowSums(rank_matrix), ties.method = "first")
   rank_dom <- calculate_dominance_ranking(rank_matrix)
-  
-  # 5. Wynik końcowy
+
   comp_df <- data.frame(
-    Alternative = rownames(decision_mat),
-    R_TOPSIS = rank_matrix[,1],
-    R_VIKOR = rank_matrix[,2],
-    R_WASPAS = rank_matrix[,3],
+    Alternatywa = .nazwy_alternatyw(decision_mat),
+    R_TOPSIS = rank_matrix[, 1],
+    R_VIKOR = rank_matrix[, 2],
+    R_WASPAS = rank_matrix[, 3],
     Meta_Sum = rank_sum,
     Meta_Dominance = rank_dom
   )
-  
-  return(list(comparison = comp_df, correlations = cor(comp_df[,-1], method="spearman")))
+
+  list(
+    comparison = comp_df,
+    correlations = stats::cor(comp_df[, -1], method = "spearman"),
+    weights = .normalizuj_wagi(weights)
+  )
 }

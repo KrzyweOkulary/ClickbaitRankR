@@ -2,11 +2,11 @@
 % Please edit documentation in R/wizualizacja.R
 \name{.motyw_mcda}
 \alias{.motyw_mcda}
-\title{Wewnętrzny motyw graficzny}
+\title{Motyw wykresów ClickbaitRankR}
 \usage{
 .motyw_mcda()
 }
 \description{
-Ujednolicony styl wykresów dla całego pakietu.
+Ujednolicony, oszczędny styl wizualizacji pakietu.
 }
 \keyword{internal}

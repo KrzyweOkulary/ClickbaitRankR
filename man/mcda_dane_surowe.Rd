@@ -4,10 +4,10 @@
 \alias{mcda_dane_surowe}
 \title{Przykładowe dane do macierzy decyzyjnej ClickbaitRankR}
 \format{
-Ramka danych (data frame) z 20 wierszami i 25 zmiennymi:
+Ramka danych (data frame) z 100 wierszami i 23 zmiennymi:
 \describe{
-  \item{EkspertID}{Identyfikator osoby oceniającej (1-5)}
-  \item{Alternatywa}{Identyfikator ocenianego artykułu lub strony (1-20)}
+  \item{EkspertID}{Identyfikator osoby oceniającej.}
+  \item{Alternatywa}{Identyfikator ocenianego artykułu lub źródła.}
 
   \item{koszt_subskrypcji}{Miesięczny koszt dostępu w PLN (19-56)}
   \item{dostep_do_tresci_bez_zalogowania}{Łatwość dostępu bez konta (skala 1-5)}
@@ -16,7 +16,7 @@ Ramka danych (data frame) z 20 wierszami i 25 zmiennymi:
   \item{autor_ekspertyza}{Doświadczenie autora w temacie (skala 1-5)}
   \item{autor_reputacja}{Ogólna wiarygodność nazwiska autora (skala 1-5)}
 
-  \item{zrodla_zewnetrzne}{Liczba dni/czas odświeżania źródeł (zmienna ciągła)}
+  \item{zrodla_zewnetrzne}{Opóźnienie lub słabość aktualizacji źródeł (zmienna ciągła)}
   \item{multimedia_dowodowe}{Procentowa wiarygodność zdjęć/wideo (80-100\%)}
   \item{cytowania_ekspertow}{Waga cytowań: 0 (brak) lub 10 (obecne)}
 
@@ -37,12 +37,15 @@ Ramka danych (data frame) z 20 wierszami i 25 zmiennymi:
   \item{clickbait_nacechowanie_wartosciujaco}{Język oceniający zamiast opisu (skala 1-5)}
   \item{clickbait_wrogi_jezyk}{Obecność agresji słownej (skala 1-5)}
 }
+
+Dane są tworzone przez skrypt `data-raw/generuj_dane_mcda.R` zgodnie z procedurą
+opisaną w `data-raw/README_DGP.md`.
 }
 \usage{
 data(mcda_dane_surowe)
 }
 \description{
-Zbiór danych zawierający symulowane odpowiedzi ekspertów dla 20 serwisów/artykułów
+Zbiór danych zawierający syntetyczne odpowiedzi ekspertów dla 20 serwisów lub artykułów
 ocenianych pod kątem rzetelności, manipulacji i cech clickbaitowych.
 Zbiór przeznaczony do użycia z funkcją `przygotuj_dane_mcda()`.
 }

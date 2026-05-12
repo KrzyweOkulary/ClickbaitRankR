@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClickbaitRankR | Dashboard analizy clickbaitowości</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .chart-box {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      min-height: 320px;
+      max-height: 480px;
+    }
+    .small-chart-box {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      min-height: 260px;
+    }
+    pre, code { font-variant-ligatures: none; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 selection:bg-sky-100 selection:text-sky-900">
+  <nav class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+      <a href="#start" class="flex items-center gap-3">
+        <div class="flex h-9 w-9 items-center justify-center rounded bg-sky-700 font-bold text-white">CR</div>
+        <div>
+          <p class="text-sm font-bold uppercase tracking-wide text-slate-950">ClickbaitRankR</p>
+          <p class="text-xs text-slate-500">dashboard analizy clickbaitowości</p>
+        </div>
+      </a>
+      <div class="hidden items-center gap-5 text-sm font-medium text-slate-600 md:flex">
+        <a href="#workflow" class="hover:text-sky-700">Proces</a>
+        <a href="#wagi" class="hover:text-sky-700">Wagi</a>
+        <a href="#vikor" class="hover:text-sky-700">VIKOR</a>
+        <a href="#meta" class="hover:text-sky-700">Meta-ranking</a>
+        <a href="#instalacja" class="hover:text-sky-700">Instalacja</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="start" class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <section class="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+      <div class="rounded border border-slate-200 bg-white p-6 shadow-sm">
+        <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-sky-700">Pakiet R do oceny źródeł i artykułów</p>
+        <h1 class="text-3xl font-extrabold tracking-tight text-slate-950 sm:text-5xl">Które źródła są najbardziej clickbaitowe?</h1>
+        <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
+          ClickbaitRankR zamienia oceny ekspertów w czytelny ranking. Pakiet pomaga porównać wiele artykułów lub źródeł naraz,
+          nawet jeśli kryteria są różne: jedne warto maksymalizować, inne minimalizować.
+        </p>
+        <div class="mt-6 grid gap-3 sm:grid-cols-3">
+          <div class="rounded border border-slate-200 bg-slate-50 p-4">
+            <p class="text-xs font-semibold uppercase text-slate-500">Dane</p>
+            <p class="mt-2 text-2xl font-bold text-slate-950">30</p>
+            <p class="text-sm text-slate-600">alternatyw w demonstracji</p>
+          </div>
+          <div class="rounded border border-slate-200 bg-slate-50 p-4">
+            <p class="text-xs font-semibold uppercase text-slate-500">Kryteria</p>
+            <p class="mt-2 text-2xl font-bold text-slate-950">9</p>
+            <p class="text-sm text-slate-600">obszarów oceny treści</p>
+          </div>
+          <div class="rounded border border-slate-200 bg-slate-50 p-4">
+            <p class="text-xs font-semibold uppercase text-slate-500">Metoda główna</p>
+            <p class="mt-2 text-2xl font-bold text-slate-950">VIKOR</p>
+            <p class="text-sm text-slate-600">ranking kompromisowy</p>
+          </div>
+        </div>
+      </div>
+
+      <aside class="rounded border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-xl font-bold text-slate-950">Najważniejszy wynik</h2>
+        <p class="mt-3 text-sm leading-6 text-slate-600">
+          Dla danych demonstracyjnych najlepszą alternatywą według Fuzzy VIKOR i wag CRITIC jest:
+        </p>
+        <div class="mt-5 rounded border border-emerald-200 bg-emerald-50 p-5">
+          <p class="text-xs font-bold uppercase tracking-wide text-emerald-700">Najlepszy kompromis</p>
+          <p class="mt-2 text-5xl font-extrabold text-emerald-950">A20</p>
+          <p class="mt-2 text-sm text-emerald-800">najniższy indeks kompromisu Q = 0.3587</p>
+        </div>
+        <p class="mt-5 text-sm leading-6 text-slate-600">
+          Ten dashboard jest statyczną stroną GitHub Pages: pokazuje wyniki wygenerowane przez pakiet, bez uruchamiania R w przeglądarce.
+        </p>
+      </aside>
+    </section>
+
+    <section id="workflow" class="mt-10 rounded border border-slate-200 bg-white p-6 shadow-sm">
+      <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-sky-700">Jak działa paczka</p>
+      <h2 class="text-2xl font-bold text-slate-950">Od ocen ekspertów do rankingu</h2>
+      <div class="mt-6 grid gap-4 md:grid-cols-5">
+        <div class="rounded border border-slate-200 bg-slate-50 p-4">
+          <p class="text-sm font-bold text-slate-950">1. Dane</p>
+          <p class="mt-2 text-sm leading-6 text-slate-600">Eksperci oceniają artykuły lub źródła według wielu cech.</p>
+        </div>
+        <div class="rounded border border-slate-200 bg-slate-50 p-4">
+          <p class="text-sm font-bold text-slate-950">2. Kryteria</p>
+          <p class="mt-2 text-sm leading-6 text-slate-600">Zmienne surowe są grupowane w kryteria, np. wiarygodność i manipulację.</p>
+        </div>
+        <div class="rounded border border-slate-200 bg-slate-50 p-4">
+          <p class="text-sm font-bold text-slate-950">3. TFN</p>
+          <p class="mt-2 text-sm leading-6 text-slate-600">Ocena jest zapisana jako przedział rozmyty, a nie jako jedna pewna liczba.</p>
+        </div>
+        <div class="rounded border border-slate-200 bg-slate-50 p-4">
+          <p class="text-sm font-bold text-slate-950">4. Wagi</p>
+          <p class="mt-2 text-sm leading-6 text-slate-600">CRITIC i Entropia liczą znaczenie kryteriów z samych danych.</p>
+        </div>
+        <div class="rounded border border-slate-200 bg-slate-50 p-4">
+          <p class="text-sm font-bold text-slate-950">5. Ranking</p>
+          <p class="mt-2 text-sm leading-6 text-slate-600">VIKOR wybiera alternatywy z najlepszym kompromisem.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-10 grid gap-6 lg:grid-cols-2">
+      <div class="rounded border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-2xl font-bold text-slate-950">Dane i procedura DGP</h2>
+        <p class="mt-3 text-sm leading-6 text-slate-600">
+          Przykładowe dane zostały wygenerowane procedurą DGP. Oznacza to, że znamy regułę tworzenia danych:
+          część źródeł jest bardziej sensacyjna, eksperci różnią się surowością, a błędy mają cięższe ogony niż w prostym rozkładzie normalnym.
+        </p>
+        <div class="mt-5 overflow-x-auto">
+          <table class="w-full min-w-[620px] text-left text-sm">
+            <thead class="border-y border-slate-200 bg-slate-50 text-xs uppercase text-slate-500">
+              <tr>
+                <th class="px-4 py-3">Kryterium</th>
+                <th class="px-4 py-3">Znaczenie proste</th>
+                <th class="px-4 py-3">Typ</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr><td class="px-4 py-3 font-medium">Wiarygodnosc</td><td class="px-4 py-3">czy źródło wygląda rzetelnie</td><td class="px-4 py-3">max</td></tr>
+              <tr><td class="px-4 py-3 font-medium">Koszt</td><td class="px-4 py-3">koszt dostępu</td><td class="px-4 py-3">min</td></tr>
+              <tr><td class="px-4 py-3 font-medium">Sensacyjnosc</td><td class="px-4 py-3">emocjonalność i clickbait</td><td class="px-4 py-3">min</td></tr>
+              <tr><td class="px-4 py-3 font-medium">Manipulacja</td><td class="px-4 py-3">przekłamania faktów i obrazu</td><td class="px-4 py-3">min</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="rounded border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-2xl font-bold text-slate-950">TFN w prostym języku</h2>
+        <p class="mt-3 text-sm leading-6 text-slate-600">
+          Oceny eksperckie nie są idealnie dokładne. Dlatego pakiet zapisuje ocenę jako trójkę:
+          dolna wartość, wartość środkowa i górna wartość. Potem wynik jest sprowadzany do jednej liczby wzorem:
+        </p>
+        <div class="mt-5 rounded border border-slate-200 bg-slate-50 p-4 text-center font-mono text-sm text-slate-800">
+          defuzz(l, m, u) = (l + 4m + u) / 6
+        </div>
+        <div class="small-chart-box mt-5">
+          <canvas id="fuzzyChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section id="wagi" class="mt-10 rounded border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+        <div>
+          <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-sky-700">Wagi obiektywne</p>
+          <h2 class="text-2xl font-bold text-slate-950">Które kryteria najbardziej wpływają na wynik?</h2>
+          <p class="mt-3 text-sm leading-6 text-slate-600">
+            Wagi nie są ustawiane ręcznie. Entropia patrzy na zróżnicowanie informacji, a CRITIC dodatkowo sprawdza,
+            czy kryterium wnosi coś innego niż pozostałe. Dzięki temu ranking jest bardziej obiektywny.
+          </p>
+          <div class="mt-5 rounded border border-sky-200 bg-sky-50 p-4 text-sm leading-6 text-sky-900">
+            W tej demonstracji CRITIC najmocniej waży koszt i dostępność. Entropia wyraźnie mocniej waży zbalansowanie.
+          </div>
+        </div>
+        <div class="chart-box">
+          <canvas id="weightsChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section id="vikor" class="mt-10 grid gap-6 lg:grid-cols-2">
+      <div class="rounded border border-slate-200 bg-white p-6 shadow-sm">
+        <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-sky-700">Metoda główna</p>
+        <h2 class="text-2xl font-bold text-slate-950">Fuzzy VIKOR</h2>
+        <p class="mt-3 text-sm leading-6 text-slate-600">
+          VIKOR szuka najlepszego kompromisu. Dobra alternatywa powinna mieć niski wynik ogólnych strat S,
+          niski największy pojedynczy żal R i niski indeks kompromisu Q.
+        </p>
+        <div class="chart-box mt-5">
+          <canvas id="vikorRankChart"></canvas>
+        </div>
+      </div>
+
+      <div class="rounded border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-2xl font-bold text-slate-950">Wykres kompromisu</h2>
+        <p class="mt-3 text-sm leading-6 text-slate-600">
+          Poniższy obraz pochodzi bezpośrednio z funkcji <code class="rounded bg-slate-100 px-1 py-0.5">plot(wynik_vikor)</code>.
+          Lepsze alternatywy są bliżej dolnego obszaru i mają większe bąble.
+        </p>
+        <img class="mt-5 w-full rounded border border-slate-200 bg-white" src="man/figures/README-vikor-plot.png" alt="Mapa kompromisu VIKOR wygenerowana przez pakiet ClickbaitRankR">
+      </div>
+    </section>
+
+    <section class="mt-10 rounded border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 class="text-2xl font-bold text-slate-950">Tabela APA dla VIKOR</h2>
+      <p class="mt-3 text-sm leading-6 text-slate-600">
+        Pakiet potrafi przygotować tabelę w stylu publikacyjnym. To jest wynik funkcji
+        <code class="rounded bg-slate-100 px-1 py-0.5">tabela_apa(wynik_vikor)</code>, pokazany tutaj dla 10 najlepszych alternatyw.
+      </p>
+      <img class="mt-5 w-full rounded border border-slate-200 bg-white" src="man/figures/README-vikor-table.png" alt="Tabela APA z wynikami Fuzzy VIKOR">
+    </section>
+
+    <section id="meta" class="mt-10 grid gap-6 lg:grid-cols-[1fr_1fr]">
+      <div class="rounded border border-slate-200 bg-white p-6 shadow-sm">
+        <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-sky-700">Kontrola stabilności</p>
+        <h2 class="text-2xl font-bold text-slate-950">Meta-ranking</h2>
+        <p class="mt-3 text-sm leading-6 text-slate-600">
+          Meta-ranking zbiera wyniki z TOPSIS, VIKOR i WASPAS. Jeżeli metody wskazują podobne alternatywy,
+          interpretacja jest stabilniejsza. Jeżeli się różnią, warto opisać, dlaczego metody inaczej rozumieją kompromis.
+        </p>
+        <div class="mt-5 overflow-x-auto">
+          <table class="w-full min-w-[680px] text-left text-sm">
+            <thead class="border-y border-slate-200 bg-slate-50 text-xs uppercase text-slate-500">
+              <tr>
+                <th class="px-3 py-3">Alt.</th>
+                <th class="px-3 py-3">TOPSIS</th>
+                <th class="px-3 py-3">VIKOR</th>
+                <th class="px-3 py-3">WASPAS</th>
+                <th class="px-3 py-3">Meta Sum</th>
+                <th class="px-3 py-3">Dominance</th>
+              </tr>
+            </thead>
+            <tbody id="metaRows" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="rounded border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-2xl font-bold text-slate-950">Zgodność metod</h2>
+        <p class="mt-3 text-sm leading-6 text-slate-600">
+          Wysoka dodatnia korelacja oznacza, że dwie metody dają podobną kolejność alternatyw.
+          Ujemna wartość pokazuje, że metoda patrzy na problem inaczej.
+        </p>
+        <div class="chart-box mt-5">
+          <canvas id="correlationChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section id="instalacja" class="mt-10 rounded border border-slate-200 bg-white p-6 shadow-sm">
+      <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-sky-700">Odtworzenie wyników</p>
+      <h2 class="text-2xl font-bold text-slate-950">Jak sprawdzić pakiet lokalnie</h2>
+      <p class="mt-3 text-sm leading-6 text-slate-600">
+        Recenzent może zainstalować pakiet, uruchomić analizę i porównać wyniki z dashboardem.
+      </p>
+      <pre class="mt-5 overflow-x-auto rounded bg-slate-950 p-5 text-sm leading-6 text-slate-100"><code>devtools::install_github("KrzyweOkulary/ClickbaitRankR")
+library(ClickbaitRankR)
+
+data("mcda_dane_surowe")
+
+macierz_tfn <- przygotuj_dane_mcda(
+  dane = mcda_dane_surowe,
+  skladnia = skladnia_clickbait,
+  kolumna_alternatyw = "Alternatywa"
+)
+
+wynik_vikor <- rozmyty_vikor(
+  macierz_decyzyjna = macierz_tfn,
+  typy_kryteriow = typy_kryteriow,
+  metoda_wag = "critic"
+)
+
+plot(wynik_vikor)
+tabela_apa(wynik_vikor)</code></pre>
+      <p class="mt-4 text-sm text-slate-500">
+        Pełny skrypt testowy znajduje się w <code class="rounded bg-slate-100 px-1 py-0.5">data-raw/sprawdz_dgp_i_funkcje.R</code>.
+      </p>
+    </section>
+  </main>
+
+  <footer class="mt-12 border-t border-slate-200 bg-white px-4 py-8 text-center text-sm text-slate-500">
+    ClickbaitRankR. Statyczny dashboard do prezentacji wyników pakietu na GitHub Pages.
+  </footer>
+
+  <script>
+    const weightsLabels = [
+      'Wiarygodnosc', 'Koszt', 'Dostepnosc', 'Jakosc zrodel', 'Opoznienie',
+      'Sensacyjnosc', 'Zbalansowanie', 'Manipulacja faktami', 'Manipulacja wizualna'
+    ];
+    const weightsCritic = [0.0865, 0.2321, 0.1518, 0.0815, 0.0823, 0.0883, 0.1064, 0.0895, 0.0816];
+    const weightsEntropy = [0.0973, 0.1283, 0.0768, 0.0871, 0.0848, 0.1089, 0.2681, 0.0945, 0.0543];
+
+    const vikorTop = [
+      { alt: 20, s: 0.3895, r: 0.0686, q: 0.3587, rank: 1 },
+      { alt: 6, s: 0.4262, r: 0.0661, q: 0.3763, rank: 2 },
+      { alt: 3, s: 0.4433, r: 0.0662, q: 0.3876, rank: 3 },
+      { alt: 12, s: 0.3550, r: 0.0932, q: 0.3975, rank: 4 },
+      { alt: 8, s: 0.4433, r: 0.0743, q: 0.4076, rank: 5 },
+      { alt: 7, s: 0.4694, r: 0.0704, q: 0.4148, rank: 6 },
+      { alt: 5, s: 0.4849, r: 0.0699, q: 0.4236, rank: 7 },
+      { alt: 18, s: 0.4539, r: 0.0779, q: 0.4237, rank: 8 },
+      { alt: 19, s: 0.3590, r: 0.1040, q: 0.4270, rank: 9 },
+      { alt: 15, s: 0.3150, r: 0.1380, q: 0.4822, rank: 10 }
+    ];
+
+    const metaRows = [
+      { alt: 20, topsis: 1, vikor: 1, waspas: 6, sum: 1, dominance: 1 },
+      { alt: 14, topsis: 6, vikor: 13, waspas: 1, sum: 2, dominance: 2 },
+      { alt: 6, topsis: 4, vikor: 2, waspas: 16, sum: 4, dominance: 3 },
+      { alt: 8, topsis: 2, vikor: 5, waspas: 15, sum: 5, dominance: 4 },
+      { alt: 19, topsis: 3, vikor: 9, waspas: 11, sum: 7, dominance: 5 },
+      { alt: 12, topsis: 5, vikor: 4, waspas: 14, sum: 6, dominance: 6 },
+      { alt: 3, topsis: 12, vikor: 3, waspas: 18, sum: 9, dominance: 7 },
+      { alt: 18, topsis: 7, vikor: 8, waspas: 19, sum: 11, dominance: 8 }
+    ];
+
+    const gridColor = '#e5e7eb';
+    const textColor = '#334155';
+
+    new Chart(document.getElementById('fuzzyChart'), {
+      type: 'line',
+      data: {
+        datasets: [{
+          label: 'TFN dla oceny 6',
+          data: [{x: 4, y: 0}, {x: 5, y: 0}, {x: 6, y: 1}, {x: 7, y: 0}, {x: 8, y: 0}],
+          borderColor: '#0369a1',
+          backgroundColor: 'rgba(3, 105, 161, 0.14)',
+          fill: true,
+          tension: 0,
+          pointRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { type: 'linear', min: 4, max: 8, grid: { color: gridColor }, title: { display: true, text: 'Skala oceny' } },
+          y: { min: 0, max: 1.1, grid: { color: gridColor }, title: { display: true, text: 'Stopień przynależności' } }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('weightsChart'), {
+      type: 'bar',
+      data: {
+        labels: weightsLabels,
+        datasets: [
+          { label: 'CRITIC', data: weightsCritic, backgroundColor: '#0369a1', borderRadius: 4 },
+          { label: 'Entropia', data: weightsEntropy, backgroundColor: '#0f766e', borderRadius: 4 }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: textColor } } },
+        scales: {
+          x: { ticks: { color: textColor, maxRotation: 45, minRotation: 45 }, grid: { display: false } },
+          y: { beginAtZero: true, grid: { color: gridColor }, title: { display: true, text: 'Waga' } }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('vikorRankChart'), {
+      type: 'bar',
+      data: {
+        labels: vikorTop.map(row => 'A' + row.alt),
+        datasets: [{
+          label: 'Q (niżej = lepiej)',
+          data: vikorTop.map(row => row.q),
+          backgroundColor: vikorTop.map((row, idx) => idx === 0 ? '#059669' : '#94a3b8'),
+          borderRadius: 4
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { min: 0.32, max: 0.50, grid: { color: gridColor }, title: { display: true, text: 'Indeks Q' } },
+          y: { grid: { display: false } }
+        }
+      }
+    });
+
+    const metaBody = document.getElementById('metaRows');
+    metaRows.forEach(row => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="px-3 py-3 font-medium">A${row.alt}</td>
+        <td class="px-3 py-3">${row.topsis}</td>
+        <td class="px-3 py-3">${row.vikor}</td>
+        <td class="px-3 py-3">${row.waspas}</td>
+        <td class="px-3 py-3">${row.sum}</td>
+        <td class="px-3 py-3 font-semibold text-slate-950">${row.dominance}</td>
+      `;
+      metaBody.appendChild(tr);
+    });
+
+    new Chart(document.getElementById('correlationChart'), {
+      type: 'bar',
+      data: {
+        labels: ['TOPSIS z VIKOR', 'WASPAS z VIKOR', 'Meta Sum z VIKOR', 'Dominance z VIKOR'],
+        datasets: [{
+          label: 'Korelacja Spearmana',
+          data: [0.808, -0.621, 0.695, 0.820],
+          backgroundColor: ['#0369a1', '#be123c', '#0f766e', '#059669'],
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { min: -1, max: 1, grid: { color: gridColor }, title: { display: true, text: 'Korelacja' } },
+          x: { grid: { display: false }, ticks: { maxRotation: 30, minRotation: 30 } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

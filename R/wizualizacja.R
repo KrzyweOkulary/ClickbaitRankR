@@ -1,161 +1,246 @@
-#' @title Wewnętrzny motyw graficzny
-#' @description Ujednolicony styl wykresów dla całego pakietu.
-#' @import ggplot2
+#' @title Motyw wykresów ClickbaitRankR
+#' @description Ujednolicony, oszczędny styl wizualizacji pakietu.
 #' @keywords internal
 .motyw_mcda <- function() {
-  list(
-    theme_light(base_size = 12),
-    scale_fill_gradient(low = "#90A4AE", high = "#2E7D32"), # Od szaro-niebieskiego do zieleni
-    scale_size_continuous(range = c(4, 16)),
-    theme(
-      plot.title = element_text(face = "bold", size = 16),
-      plot.subtitle = element_text(color = "grey40", size = 11),
-      panel.border = element_rect(color = "black", fill = NA, linewidth = 0.5),
+  ggplot2::theme_minimal(base_size = 12) +
+    ggplot2::theme(
+      plot.title = ggplot2::element_text(face = "bold", size = 15, color = "#1F2933"),
+      plot.subtitle = ggplot2::element_text(size = 10.5, color = "#52606D"),
+      panel.grid.minor = ggplot2::element_blank(),
+      panel.grid.major = ggplot2::element_line(color = "#E4E7EB", linewidth = 0.35),
+      axis.title = ggplot2::element_text(face = "bold", color = "#323F4B"),
+      axis.text = ggplot2::element_text(color = "#52606D"),
       legend.position = "right",
-      axis.title = element_text(face = "bold")
+      legend.title = ggplot2::element_text(face = "bold"),
+      plot.margin = ggplot2::margin(10, 18, 10, 10)
     )
+}
+
+#' Wykres bąbelkowy VIKOR
+#'
+#' @description
+#' Rysuje główną wizualizację pakietu: mapę kompromisu VIKOR.
+#' Niższe wartości `S`, `R` i `Q` oznaczają korzystniejszą alternatywę,
+#' dlatego najlepsze punkty znajdują się bliżej lewego dolnego rogu.
+#'
+#' @param x Obiekt klasy `rozmyty_vikor_wynik`.
+#' @param liczba_etykiet Liczba najlepszych alternatyw podpisywanych na wykresie.
+#' @param ... Dodatkowe argumenty ignorowane przez metodę.
+#'
+#' @return Obiekt `ggplot`.
+#' @importFrom ggplot2 ggplot aes annotate coord_cartesian element_blank element_line element_text expansion geom_hline geom_point geom_vline labs margin scale_fill_manual scale_size_continuous scale_x_continuous scale_y_continuous theme theme_minimal
+#' @importFrom ggrepel geom_text_repel
+#' @export
+plot.rozmyty_vikor_wynik <- function(x, liczba_etykiet = 12, ...) {
+  df <- x$wyniki
+  if (is.null(df) || !all(c("Def_S", "Def_R", "Def_Q", "Ranking") %in% names(df))) {
+    stop("Obiekt 'x' nie zawiera wynikow VIKOR w oczekiwanym formacie.")
+  }
+
+  q_zakres <- range(df$Def_Q, na.rm = TRUE)
+  if (q_zakres[1] == q_zakres[2]) {
+    df$Sila_kompromisu <- 1
+  } else {
+    df$Sila_kompromisu <- 1 - ((df$Def_Q - q_zakres[1]) / (q_zakres[2] - q_zakres[1]))
+  }
+
+  df$Grupa <- "Pozosta\u0142e"
+  df$Grupa[df$Ranking <= 3] <- "Czo\u0142\u00f3wka"
+  df$Grupa[df$Ranking == 1] <- "Najlepsza"
+  df$Grupa <- factor(df$Grupa, levels = c("Najlepsza", "Czo\u0142\u00f3wka", "Pozosta\u0142e"))
+
+  liczba_etykiet <- min(max(1, liczba_etykiet), nrow(df))
+  df$Etykieta <- ifelse(df$Ranking <= liczba_etykiet, paste0("A", df$Alternatywa), "")
+
+  s_mediana <- stats::median(df$Def_S, na.rm = TRUE)
+  r_mediana <- stats::median(df$Def_R, na.rm = TRUE)
+
+  ggplot2::ggplot(df, ggplot2::aes(x = Def_S, y = Def_R)) +
+    ggplot2::annotate(
+      "rect",
+      xmin = -Inf, xmax = s_mediana, ymin = -Inf, ymax = r_mediana,
+      fill = "#E6F4F1", alpha = 0.75
+    ) +
+    ggplot2::geom_vline(xintercept = s_mediana, linetype = "dashed", color = "#9AA5B1", linewidth = 0.45) +
+    ggplot2::geom_hline(yintercept = r_mediana, linetype = "dashed", color = "#9AA5B1", linewidth = 0.45) +
+    ggplot2::geom_point(
+      ggplot2::aes(size = Sila_kompromisu, fill = Grupa),
+      shape = 21, color = "#243B53", stroke = 0.55, alpha = 0.9
+    ) +
+    ggrepel::geom_text_repel(
+      ggplot2::aes(label = Etykieta),
+      size = 3.2,
+      color = "#1F2933",
+      min.segment.length = 0,
+      box.padding = 0.35,
+      point.padding = 0.25,
+      seed = 42,
+      max.overlaps = Inf,
+      na.rm = TRUE
+    ) +
+    ggplot2::scale_fill_manual(
+      values = c("Najlepsza" = "#0072B2", "Czo\u0142\u00f3wka" = "#009E73", "Pozosta\u0142e" = "#CBD2D9"),
+      drop = FALSE
+    ) +
+    ggplot2::scale_size_continuous(
+      range = c(3.5, 12.5),
+      limits = c(0, 1),
+      name = "Si\u0142a kompromisu"
+    ) +
+    ggplot2::scale_x_continuous(expand = ggplot2::expansion(mult = c(0.08, 0.16))) +
+    ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0.08, 0.16))) +
+    ggplot2::coord_cartesian(clip = "off") +
+    ggplot2::labs(
+      title = "Mapa kompromisu VIKOR",
+      subtitle = "Lewe dolne pole wskazuje alternatywy o ni\u017cszym S i R; wi\u0119kszy b\u0105bel oznacza ni\u017cszy Q.",
+      x = "U\u017cyteczno\u015b\u0107 grupowa S",
+      y = "Regret indywidualny R",
+      fill = "Pozycja"
+    ) +
+    .motyw_mcda()
+}
+
+#' Wykres bąbelkowy VIKOR dla aliasu angielskiego
+#'
+#' @description Metoda zgodności dla obiektów zwracanych przez `fuzzy_vikor()`.
+#'
+#' @param x Obiekt klasy `fuzzy_vikor_res`.
+#' @param ... Dodatkowe argumenty przekazywane do wykresu VIKOR.
+#'
+#' @return Obiekt `ggplot`.
+#' @export
+plot.fuzzy_vikor_res <- function(x, ...) {
+  wynik <- list(
+    wyniki = data.frame(
+      Alternatywa = x$results$Alternative,
+      Def_S = x$results$Def_S,
+      Def_R = x$results$Def_R,
+      Def_Q = x$results$Def_Q,
+      Ranking = x$results$Ranking,
+      row.names = NULL
+    ),
+    detale = x$details,
+    parametry = x$params
+  )
+  class(wynik) <- "rozmyty_vikor_wynik"
+  plot.rozmyty_vikor_wynik(wynik, ...)
+}
+
+#' Generowanie tabeli APA
+#'
+#' @description
+#' Funkcja przeksztalca wyniki analizy MCDA (TOPSIS, VIKOR, WASPAS,
+#' Meta-Ranking) w sformatowana tabele zgodna ze stylem APA, gotowa
+#' do druku albo zapisu do dokumentu Word.
+#'
+#' @param x Obiekt wynikowy z funkcji pakietu, np. `rozmyty_topsis_wynik`.
+#' @param tytul Opcjonalny tytul tabeli.
+#' @param ... Dodatkowe argumenty przekazywane do metod S3.
+#'
+#' @return Obiekt klasy `flextable`.
+#' @importFrom rempsyc nice_table
+#' @importFrom flextable autofit save_as_docx
+#' @export
+tabela_apa <- function(x, tytul = NULL, ...) {
+  UseMethod("tabela_apa")
+}
+
+#' @title Pomocnicze formatowanie tabel APA
+#' @keywords internal
+.utworz_tabele_apa <- function(df, numer_tabeli, tytul, uwaga) {
+  tabela <- rempsyc::nice_table(
+    df,
+    title = c(paste("Tabela", numer_tabeli), tytul),
+    note = uwaga
+  )
+  flextable::autofit(tabela)
+}
+
+#' @export
+tabela_apa.rozmyty_topsis_wynik <- function(x, tytul = "Wyniki metody Fuzzy TOPSIS", ...) {
+  df <- x$wyniki
+  names(df) <- c("Alternatywa", "D+ (do idealu)", "D- (od antyidealu)", "Wynik (CC)", "Ranking")
+
+  df[["D+ (do idealu)"]] <- round(df[["D+ (do idealu)"]], 3)
+  df[["D- (od antyidealu)"]] <- round(df[["D- (od antyidealu)"]], 3)
+  df[["Wynik (CC)"]] <- round(df[["Wynik (CC)"]], 4)
+
+  .utworz_tabele_apa(
+    df = df,
+    numer_tabeli = 1,
+    tytul = tytul,
+    uwaga = "Uwaga. CC oznacza coefficient of closeness. Wyzsza wartosc wskazuje lepsza alternatywe."
   )
 }
 
-#' Mapa Strategiczna VIKOR
-#' 
-#' @description Wizualizacja typu cIPMA.
-#' Oś X: Efektywność grupowa (odwrócone S). Oś Y: Ryzyko/Żal (R).
-#' Wielkość bąbla: Siła kompromisu (zależna od Q).
-#' s
-#' @param x Obiekt klasy `rozmyty_vikor_wynik`.
-#' @param ... Dodatkowe argumenty (ignorowane).
-#' @import ggplot2
-#' @import ggrepel
 #' @export
-plot.rozmyty_vikor_wynik <- function(x, ...) {
+tabela_apa.rozmyty_vikor_wynik <- function(x, tytul = "Wyniki metody Fuzzy VIKOR", ...) {
   df <- x$wyniki
-  
-  # 1. Matematyka wykresu: Odwracamy S (żeby im więcej tym lepiej na osi X)
-  s_min <- min(df$Def_S); s_max <- max(df$Def_S)
-  # Normalizacja do 0-100
-  df$Wydajnosc <- ((s_max - df$Def_S) / (s_max - s_min)) * 100
-  
-  # Wielkość bąbla (odwrócone Q - im mniejsze Q tym większy bąbel, bo to lżejszy kompromis)
-  q_inv <- 1 - ((df$Def_Q - min(df$Def_Q)) / (max(df$Def_Q) - min(df$Def_Q)))
-  df$Rozmiar <- (q_inv + 0.1)^3 # Potęgowanie dla lepszego kontrastu wizualnego
-  
-  # Środki do wyznaczenia ćwiartek
-  srodek_perf <- median(df$Wydajnosc, na.rm=TRUE)
-  srodek_ryzyko <- median(df$Def_R, na.rm=TRUE)
-  
-  ggplot(df, aes(x = Wydajnosc, y = Def_R)) +
-    # Tło dla strefy Lidera (Prawa dolna ćwiartka: Duża wydajność, Małe ryzyko)
-    annotate("rect", xmin=srodek_perf, xmax=Inf, ymin=-Inf, ymax=srodek_ryzyko, fill="#E8F5E9", alpha=0.5) +
-    
-    # Linie podziału
-    geom_vline(xintercept = srodek_perf, linetype = "dashed", color = "grey50") +
-    geom_hline(yintercept = srodek_ryzyko, linetype = "dashed", color = "grey50") +
-    
-    # Etykiety stref
-    annotate("text", x = max(df$Wydajnosc), y = min(df$Def_R), label = "STABILNY LIDER\n(Wysoka Efekt., Niskie Ryzyko)", 
-             hjust=1, vjust=0, size=3, fontface="bold.italic", color="darkgreen") +
-    annotate("text", x = min(df$Wydajnosc), y = max(df$Def_R), label = "UNIKAĆ\n(Niska Efekt., Wysokie Ryzyko)", 
-             hjust=0, vjust=1, size=3, fontface="italic", color="#B71C1C") +
-    
-    # Bąble
-    geom_point(aes(size = Rozmiar, fill = Wydajnosc), shape = 21, color = "black", alpha = 0.8) +
-    geom_text_repel(aes(label = paste0("Alt ", Alternatywa)), box.padding = 0.5) +
-    
-    scale_x_continuous(expand = expansion(mult = 0.2)) +
-    
-    labs(
-      title = "Mapa Strategiczna VIKOR",
-      subtitle = "Zielona strefa = Najlepszy kompromis.",
-      x = "Indeks Wydajności Grupy (odwrócone S)",
-      y = "Indeks Ryzyka / Żalu (R)",
-      size = "Dominacja",
-      fill = "Wynik"
-    ) +
-    .motyw_mcda()
+  names(df) <- c("Alternatywa", "S (grupa)", "R (zal)", "Q (kompromis)", "Ranking")
+
+  df[["S (grupa)"]] <- round(df[["S (grupa)"]], 3)
+  df[["R (zal)"]] <- round(df[["R (zal)"]], 3)
+  df[["Q (kompromis)"]] <- round(df[["Q (kompromis)"]], 4)
+
+  .utworz_tabele_apa(
+    df = df,
+    numer_tabeli = 2,
+    tytul = tytul,
+    uwaga = "Uwaga. S oznacza uzytecznosc grupy, R indywidualny zal, a Q indeks kompromisu. Nizsza wartosc Q wskazuje lepsza alternatywe."
+  )
 }
 
-#' Mapa Efektywności TOPSIS
-#' 
-#' @description Pokazuje odległość od ideału. Oś X: Dystans od Najgorszego (D-).
-#' Oś Y: Dystans do Najlepszego (D+).
-#' Cel: Chcemy być w prawym dolnym rogu (Daleko od D-, Blisko D+).
-#' 
-#' @param x Obiekt klasy `rozmyty_topsis_wynik`.
-#' @param ... Dodatkowe argumenty.
 #' @export
-plot.rozmyty_topsis_wynik <- function(x, ...) {
-  df <- x$wyniki
-  df$Rozmiar <- (df$Wynik)^4 # Podbicie różnic w wielkości
-  
-  # Punkt Idealny na wykresie (Target)
-  cel_x <- max(df$D_minus) * 1.02
-  cel_y <- min(df$D_plus) * 0.98
-  
-  # Obliczenie wizualnej odległości euklidesowej na wykresie
-  df$OdlegloscWizualna <- sqrt((df$D_minus - cel_x)^2 + (df$D_plus - cel_y)^2)
-  
-  ggplot(df, aes(x = D_minus, y = D_plus)) +
-    # Linie łączące z punktem idealnym
-    geom_segment(aes(xend = cel_x, yend = cel_y), linetype = "dotted", color = "grey50") +
-    
-    # Etykieta odległości na linii
-    geom_label(aes(x = (D_minus + cel_x) / 2, y = (D_plus + cel_y) / 2, 
-                   label = sprintf("%.3f", OdlegloscWizualna)), 
-               size = 2.5, color = "grey30", label.size = 0, alpha = 0.7) +
-    
-    # Bąble
-    geom_point(aes(size = Rozmiar, fill = Wynik), shape = 21, color = "black", alpha = 0.9) +
-    geom_text_repel(aes(label = paste0("Alt ", Alternatywa)), box.padding = 0.6) +
-    
-    # Marker Idealu (Złoty romb)
-    annotate("point", x = cel_x, y = cel_y, shape=18, size=6, color="#FFD700") +
-    annotate("text", x = cel_x, y = cel_y, label="IDEAŁ", vjust=2, size=3.5, fontface="bold") +
-    
-    labs(
-      title = "Mapa Efektywności TOPSIS",
-      subtitle = "Linie przerywane pokazują drogę do rozwiązania idealnego.",
-      x = "Dystans od Anty-Wzorca (D-)",
-      y = "Dystans do Wzorca (D+)",
-      size = "Bliskość^4",
-      fill = "Wynik (CC)"
-    ) +
-    .motyw_mcda()
+tabela_apa.fuzzy_vikor_res <- function(x, tytul = "Wyniki metody Fuzzy VIKOR", ...) {
+  wynik <- list(
+    wyniki = data.frame(
+      Alternatywa = x$results$Alternative,
+      Def_S = x$results$Def_S,
+      Def_R = x$results$Def_R,
+      Def_Q = x$results$Def_Q,
+      Ranking = x$results$Ranking,
+      row.names = NULL
+    )
+  )
+  class(wynik) <- "rozmyty_vikor_wynik"
+  tabela_apa(wynik, tytul = tytul, ...)
 }
 
-#' Mapa Spójności WASPAS
-#' 
-#' @description Porównuje podejście addytywne (WSM) z multiplikatywnym (WPM).
-#' Jeśli punkty leżą na przekątnej, metoda jest spójna.
-#' 
-#' @param x Obiekt klasy `rozmyty_waspas_wynik`.
-#' @param ... Dodatkowe argumenty.
 #' @export
-plot.rozmyty_waspas_wynik <- function(x, ...) {
+tabela_apa.rozmyty_waspas_wynik <- function(x, tytul = "Wyniki metody Fuzzy WASPAS", ...) {
   df <- x$wyniki
-  
-  # Obliczenie spójności (im mniejsza różnica między WSM a WPM tym lepiej)
-  df$Odchylenie <- abs(df$WSM - df$WPM)
-  df$Spojnosc <- 1 - (df$Odchylenie / max(df$Odchylenie))
-  
-  ggplot(df, aes(x = WSM, y = WPM)) +
-    # Pasmo spójności
-    geom_ribbon(aes(ymin = WSM - 0.05, ymax = WSM + 0.05), fill = "grey90", alpha = 0.5) +
-    geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "grey50") +
-    
-    geom_point(aes(size = Wynik^3, fill = Spojnosc), shape = 21, color = "black", alpha = 0.8) +
-    geom_text_repel(aes(label = paste0("Alt ", Alternatywa)), box.padding = 0.5) +
-    
-    labs(
-      title = "Mapa Spójności WASPAS",
-      subtitle = "Punkty poza szarym pasmem są 'chwiejne' (duża różnica między WSM a WPM).",
-      x = "Suma Ważona (WSM)",
-      y = "Iloczyn Ważony (WPM)",
-      size = "Wynik Q",
-      fill = "Spójność"
-    ) +
-    .motyw_mcda()
+  names(df) <- c("Alternatywa", "WSM (suma)", "WPM (iloczyn)", "Q (laczny)", "Ranking")
+
+  df[["WSM (suma)"]] <- round(df[["WSM (suma)"]], 3)
+  df[["WPM (iloczyn)"]] <- round(df[["WPM (iloczyn)"]], 3)
+  df[["Q (laczny)"]] <- round(df[["Q (laczny)"]], 4)
+
+  .utworz_tabele_apa(
+    df = df,
+    numer_tabeli = 3,
+    tytul = tytul,
+    uwaga = "Uwaga. WSM oznacza weighted sum model, a WPM weighted product model."
+  )
 }
 
-# Fix dla ostrzeżeń R CMD check o zmiennych globalnych w ggplot2
-utils::globalVariables(c("Def_S", "Def_R", "D_plus", "D_minus", "Wynik", "WSM", "WPM", "Wydajnosc", "Rozmiar", "OdlegloscWizualna", "Spojnosc", "Alternatywa"))
+#' @export
+tabela_apa.list <- function(x, tytul = "Meta-Ranking (konsensus)", ...) {
+  if (!is.null(x$comparison)) {
+    df <- x$comparison
+  } else if (!is.null(x$porownanie)) {
+    df <- x$porownanie
+  } else {
+    stop("To nie jest obiekt meta-rankingu.")
+  }
+
+  names(df) <- gsub("_", " ", names(df), fixed = TRUE)
+
+  .utworz_tabele_apa(
+    df = df,
+    numer_tabeli = 4,
+    tytul = tytul,
+    uwaga = "Uwaga. Tabela zestawia rangi uzyskane roznymi metodami oraz rankingi konsensusu."
+  )
+}
+
+utils::globalVariables(c("Def_S", "Def_R", "Def_Q", "Sila_kompromisu", "Grupa", "Etykieta"))
