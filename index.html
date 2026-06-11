@@ -122,20 +122,61 @@
           Przykładowe dane zostały wygenerowane procedurą DGP. Oznacza to, że znamy regułę tworzenia danych:
           część źródeł jest bardziej sensacyjna, eksperci różnią się surowością, a błędy mają cięższe ogony niż w prostym rozkładzie normalnym.
         </p>
-        <div class="mt-5 overflow-x-auto">
+       <div class="mt-5 overflow-x-auto">
           <table class="w-full min-w-[620px] text-left text-sm">
             <thead class="border-y border-slate-200 bg-slate-50 text-xs uppercase text-slate-500">
               <tr>
                 <th class="px-4 py-3">Kryterium</th>
-                <th class="px-4 py-3">Znaczenie proste</th>
+                <th class="px-4 py-3">Zmienne składowe (Składnia)</th>
                 <th class="px-4 py-3">Typ</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
-              <tr><td class="px-4 py-3 font-medium">Wiarygodnosc</td><td class="px-4 py-3">czy źródło wygląda rzetelnie</td><td class="px-4 py-3">max</td></tr>
-              <tr><td class="px-4 py-3 font-medium">Koszt</td><td class="px-4 py-3">koszt dostępu</td><td class="px-4 py-3">min</td></tr>
-              <tr><td class="px-4 py-3 font-medium">Sensacyjnosc</td><td class="px-4 py-3">emocjonalność i clickbait</td><td class="px-4 py-3">min</td></tr>
-              <tr><td class="px-4 py-3 font-medium">Manipulacja</td><td class="px-4 py-3">przekłamania faktów i obrazu</td><td class="px-4 py-3">min</td></tr>
+              <tr>
+                <td class="px-4 py-3 font-medium text-slate-900">Wiarygodność</td>
+                <td class="px-4 py-3 text-slate-600">autor transparentność, autor ekspertyza, autor reputacja</td>
+                <td class="px-4 py-3 text-emerald-700 font-medium">max</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-medium text-slate-900">Koszt</td>
+                <td class="px-4 py-3 text-slate-600">koszt subskrypcji</td>
+                <td class="px-4 py-3 text-rose-700 font-medium">min</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-medium text-slate-900">Dostępność</td>
+                <td class="px-4 py-3 text-slate-600">dostęp do treści bez zalogowania</td>
+                <td class="px-4 py-3 text-emerald-700 font-medium">max</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-medium text-slate-900">Jakość źródeł</td>
+                <td class="px-4 py-3 text-slate-600">multimedia dowodowe, cytowania ekspertów</td>
+                <td class="px-4 py-3 text-emerald-700 font-medium">max</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-medium text-slate-900">Opóźnienie źródeł</td>
+                <td class="px-4 py-3 text-slate-600">źródła zewnętrzne</td>
+                <td class="px-4 py-3 text-rose-700 font-medium">min</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-medium text-slate-900">Sensacyjność</td>
+                <td class="px-4 py-3 text-slate-600">przymiotniki emocjonalne, język hiperbola, clickbait luka informacyjna, clickbait nacechowanie wartościująco, clickbait wrogi język</td>
+                <td class="px-4 py-3 text-rose-700 font-medium">min</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-medium text-slate-900">Zbalansowanie</td>
+                <td class="px-4 py-3 text-slate-600">zbalansowanie stron, neutralność nagłówka</td>
+                <td class="px-4 py-3 text-emerald-700 font-medium">max</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-medium text-slate-900">Manipulacja faktami</td>
+                <td class="px-4 py-3 text-slate-600">fakt wyrwanie z kontekstu, fakt selektywność, fakt anegdotyczny</td>
+                <td class="px-4 py-3 text-rose-700 font-medium">min</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-medium text-slate-900">Manipulacja wizualna</td>
+                <td class="px-4 py-3 text-slate-600">wizual wykres osie, wizual zdjęcie kontekst, wizual retusz sugestywny</td>
+                <td class="px-4 py-3 text-rose-700 font-medium">min</td>
+              </tr>
             </tbody>
           </table>
         </div>
