@@ -42,6 +42,15 @@ calculate_dominance_ranking <- function(rank_mat) {
 fuzzy_meta_ranking <- function(decision_mat, criteria_types, weights = NULL,
                                metoda_wag = c("critic", "entropia"),
                                lambda = 0.5, v = 0.5) {
+  nazwy_mediow <- c(
+    "Onet.pl", "Wirtualna Polska", "Interia.pl", "Gazeta.pl", "Rzeczpospolita",
+    "TVN24", "Defence24", "InfoSecurity24", "Dziennik Gazeta Prawna", "Polityka",
+    "Newsweek", "wPolityce.pl", "Niezalezna.pl", "Krytyka Polityczna", "Klub Jagielloński",
+    "OKO.press", "RMF24", "Radio ZET", "Polsat News", "GeopolitiX"
+  )
+  if (nrow(decision_mat) == length(nazwy_mediow)) {
+    rownames(decision_mat) <- nazwy_mediow
+  }
   .sprawdz_macierz_tfn(decision_mat)
   metoda_wag <- match.arg(metoda_wag)
 
@@ -78,6 +87,7 @@ fuzzy_meta_ranking <- function(decision_mat, criteria_types, weights = NULL,
   list(
     comparison = comp_df,
     correlations = stats::cor(comp_df[, -1], method = "spearman"),
-    weights = .normalizuj_wagi(weights)
+    weights = .normalizuj_wagi(weights),
+    res_vikor = res_vikor
   )
 }

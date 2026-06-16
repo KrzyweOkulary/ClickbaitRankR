@@ -50,7 +50,7 @@ plot.rozmyty_vikor_wynik <- function(x, liczba_etykiet = 12, ...) {
   df$Grupa <- factor(df$Grupa, levels = c("Najlepsza", "Czo\u0142\u00f3wka", "Pozosta\u0142e"))
 
   liczba_etykiet <- min(max(1, liczba_etykiet), nrow(df))
-  df$Etykieta <- ifelse(df$Ranking <= liczba_etykiet, paste0("A", df$Alternatywa), "")
+  df$Etykieta <- ifelse(df$Ranking <= liczba_etykiet, as.character(df$Alternatywa), "")
 
   s_mediana <- stats::median(df$Def_S, na.rm = TRUE)
   r_mediana <- stats::median(df$Def_R, na.rm = TRUE)
@@ -69,11 +69,12 @@ plot.rozmyty_vikor_wynik <- function(x, liczba_etykiet = 12, ...) {
     ) +
     ggrepel::geom_text_repel(
       ggplot2::aes(label = Etykieta),
-      size = 3.2,
+      size = 2.8,
       color = "#1F2933",
       min.segment.length = 0,
-      box.padding = 0.35,
-      point.padding = 0.25,
+      box.padding = 0.6,
+      point.padding = 0.4,
+      force = 3,
       seed = 42,
       max.overlaps = Inf,
       na.rm = TRUE

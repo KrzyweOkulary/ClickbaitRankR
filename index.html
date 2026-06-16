@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
+
     .chart-box {
       position: relative;
       width: 100%;
@@ -15,15 +19,21 @@
       min-height: 320px;
       max-height: 480px;
     }
+
     .small-chart-box {
       position: relative;
       width: 100%;
       height: 300px;
       min-height: 260px;
     }
-    pre, code { font-variant-ligatures: none; }
+
+    pre,
+    code {
+      font-variant-ligatures: none;
+    }
   </style>
 </head>
+
 <body class="bg-slate-50 text-slate-800 selection:bg-sky-100 selection:text-sky-900">
   <nav class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
@@ -47,10 +57,13 @@
   <main id="start" class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
     <section class="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
       <div class="rounded border border-slate-200 bg-white p-6 shadow-sm">
-        <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-sky-700">Pakiet R do oceny źródeł i artykułów</p>
-        <h1 class="text-3xl font-extrabold tracking-tight text-slate-950 sm:text-5xl">Które źródła są najbardziej clickbaitowe?</h1>
+        <p class="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-sky-700">Pakiet R do oceny źródeł i artykułów
+        </p>
+        <h1 class="text-3xl font-extrabold tracking-tight text-slate-950 sm:text-5xl">Które źródła są najbardziej
+          clickbaitowe?</h1>
         <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
-          ClickbaitRankR zamienia oceny ekspertów w czytelny ranking. Pakiet pomaga porównać wiele artykułów lub źródeł naraz,
+          ClickbaitRankR zamienia oceny ekspertów w czytelny ranking. Pakiet pomaga porównać wiele artykułów lub źródeł
+          naraz,
           nawet jeśli kryteria są różne: jedne warto maksymalizować, inne minimalizować.
         </p>
         <div class="mt-6 grid gap-3 sm:grid-cols-3">
@@ -79,11 +92,12 @@
         </p>
         <div class="mt-5 rounded border border-emerald-200 bg-emerald-50 p-5">
           <p class="text-xs font-bold uppercase tracking-wide text-emerald-700">Najlepszy kompromis</p>
-          <p class="mt-2 text-5xl font-extrabold text-emerald-950">A20</p>
+          <p class="mt-2 text-5xl font-extrabold text-emerald-950">"Klub Jagielloński"</p>
           <p class="mt-2 text-sm text-emerald-800">najniższy indeks kompromisu Q = 0.3587</p>
         </div>
         <p class="mt-5 text-sm leading-6 text-slate-600">
-          Ten dashboard jest statyczną stroną GitHub Pages: pokazuje wyniki wygenerowane przez pakiet, bez uruchamiania R w przeglądarce.
+          Ten dashboard jest statyczną stroną GitHub Pages: pokazuje wyniki wygenerowane przez pakiet, bez uruchamiania
+          R w przeglądarce.
         </p>
       </aside>
     </section>
@@ -98,15 +112,18 @@
         </div>
         <div class="rounded border border-slate-200 bg-slate-50 p-4">
           <p class="text-sm font-bold text-slate-950">2. Kryteria</p>
-          <p class="mt-2 text-sm leading-6 text-slate-600">Zmienne surowe są grupowane w kryteria, np. wiarygodność i manipulację.</p>
+          <p class="mt-2 text-sm leading-6 text-slate-600">Zmienne surowe są grupowane w kryteria, np. wiarygodność i
+            manipulację.</p>
         </div>
         <div class="rounded border border-slate-200 bg-slate-50 p-4">
           <p class="text-sm font-bold text-slate-950">3. TFN</p>
-          <p class="mt-2 text-sm leading-6 text-slate-600">Ocena jest zapisana jako przedział rozmyty, a nie jako jedna pewna liczba.</p>
+          <p class="mt-2 text-sm leading-6 text-slate-600">Ocena jest zapisana jako przedział rozmyty, a nie jako jedna
+            pewna liczba.</p>
         </div>
         <div class="rounded border border-slate-200 bg-slate-50 p-4">
           <p class="text-sm font-bold text-slate-950">4. Wagi</p>
-          <p class="mt-2 text-sm leading-6 text-slate-600">CRITIC i Entropia liczą znaczenie kryteriów z samych danych.</p>
+          <p class="mt-2 text-sm leading-6 text-slate-600">CRITIC i Entropia liczą znaczenie kryteriów z samych danych.
+          </p>
         </div>
         <div class="rounded border border-slate-200 bg-slate-50 p-4">
           <p class="text-sm font-bold text-slate-950">5. Ranking</p>
@@ -120,9 +137,10 @@
         <h2 class="text-2xl font-bold text-slate-950">Dane i procedura DGP</h2>
         <p class="mt-3 text-sm leading-6 text-slate-600">
           Przykładowe dane zostały wygenerowane procedurą DGP. Oznacza to, że znamy regułę tworzenia danych:
-          część źródeł jest bardziej sensacyjna, eksperci różnią się surowością, a błędy mają cięższe ogony niż w prostym rozkładzie normalnym.
+          część źródeł jest bardziej sensacyjna, eksperci różnią się surowością, a błędy mają cięższe ogony niż w
+          prostym rozkładzie normalnym.
         </p>
-       <div class="mt-5 overflow-x-auto">
+        <div class="mt-5 overflow-x-auto">
           <table class="w-full min-w-[620px] text-left text-sm">
             <thead class="border-y border-slate-200 bg-slate-50 text-xs uppercase text-slate-500">
               <tr>
@@ -159,7 +177,8 @@
               </tr>
               <tr>
                 <td class="px-4 py-3 font-medium text-slate-900">Sensacyjność</td>
-                <td class="px-4 py-3 text-slate-600">przymiotniki emocjonalne, język hiperbola, clickbait luka informacyjna, clickbait nacechowanie wartościująco, clickbait wrogi język</td>
+                <td class="px-4 py-3 text-slate-600">przymiotniki emocjonalne, język hiperbola, clickbait luka
+                  informacyjna, clickbait nacechowanie wartościująco, clickbait wrogi język</td>
                 <td class="px-4 py-3 text-rose-700 font-medium">min</td>
               </tr>
               <tr>
@@ -169,12 +188,14 @@
               </tr>
               <tr>
                 <td class="px-4 py-3 font-medium text-slate-900">Manipulacja faktami</td>
-                <td class="px-4 py-3 text-slate-600">fakt wyrwanie z kontekstu, fakt selektywność, fakt anegdotyczny</td>
+                <td class="px-4 py-3 text-slate-600">fakt wyrwanie z kontekstu, fakt selektywność, fakt anegdotyczny
+                </td>
                 <td class="px-4 py-3 text-rose-700 font-medium">min</td>
               </tr>
               <tr>
                 <td class="px-4 py-3 font-medium text-slate-900">Manipulacja wizualna</td>
-                <td class="px-4 py-3 text-slate-600">wizual wykres osie, wizual zdjęcie kontekst, wizual retusz sugestywny</td>
+                <td class="px-4 py-3 text-slate-600">wizual wykres osie, wizual zdjęcie kontekst, wizual retusz
+                  sugestywny</td>
                 <td class="px-4 py-3 text-rose-700 font-medium">min</td>
               </tr>
             </tbody>
@@ -232,10 +253,12 @@
       <div class="rounded border border-slate-200 bg-white p-6 shadow-sm">
         <h2 class="text-2xl font-bold text-slate-950">Wykres kompromisu</h2>
         <p class="mt-3 text-sm leading-6 text-slate-600">
-          Poniższy obraz pochodzi bezpośrednio z funkcji <code class="rounded bg-slate-100 px-1 py-0.5">plot(wynik_vikor)</code>.
+          Poniższy obraz pochodzi bezpośrednio z funkcji <code
+            class="rounded bg-slate-100 px-1 py-0.5">plot(wynik_vikor)</code>.
           Lepsze alternatywy są bliżej dolnego obszaru i mają większe bąble.
         </p>
-        <img class="mt-5 w-full rounded border border-slate-200 bg-white" src="man/figures/README-vikor-plot.png" alt="Mapa kompromisu VIKOR wygenerowana przez pakiet ClickbaitRankR">
+        <img class="mt-5 w-full rounded border border-slate-200 bg-white" src="man/figures/README-vikor-plot.png"
+          alt="Mapa kompromisu VIKOR wygenerowana przez pakiet ClickbaitRankR">
       </div>
     </section>
 
@@ -243,9 +266,11 @@
       <h2 class="text-2xl font-bold text-slate-950">Tabela APA dla VIKOR</h2>
       <p class="mt-3 text-sm leading-6 text-slate-600">
         Pakiet potrafi przygotować tabelę w stylu publikacyjnym. To jest wynik funkcji
-        <code class="rounded bg-slate-100 px-1 py-0.5">tabela_apa(wynik_vikor)</code>, pokazany tutaj dla 10 najlepszych alternatyw.
+        <code class="rounded bg-slate-100 px-1 py-0.5">tabela_apa(wynik_vikor)</code>, pokazany tutaj dla 10 najlepszych
+        alternatyw.
       </p>
-      <img class="mt-5 w-full rounded border border-slate-200 bg-white" src="man/figures/README-vikor-table.png" alt="Tabela APA z wynikami Fuzzy VIKOR">
+      <img class="mt-5 w-full rounded border border-slate-200 bg-white" src="man/figures/README-vikor-table.png"
+        alt="Tabela APA z wynikami Fuzzy VIKOR">
     </section>
 
     <section id="meta" class="mt-10 grid gap-6 lg:grid-cols-[1fr_1fr]">
@@ -307,11 +332,12 @@ wynik_vikor <- rozmyty_vikor(
   typy_kryteriow = typy_kryteriow,
   metoda_wag = "critic"
 )
-
-plot(wynik_vikor)
+      
+plot(wynik_vikor, liczba_etykiet = 20)
 tabela_apa(wynik_vikor)</code></pre>
       <p class="mt-4 text-sm text-slate-500">
-        Pełny skrypt testowy znajduje się w <code class="rounded bg-slate-100 px-1 py-0.5">data-raw/sprawdz_dgp_i_funkcje.R</code>.
+        Pełny skrypt testowy znajduje się w <code
+          class="rounded bg-slate-100 px-1 py-0.5">data-raw/sprawdz_dgp_i_funkcje.R</code>.
       </p>
     </section>
   </main>
@@ -329,27 +355,27 @@ tabela_apa(wynik_vikor)</code></pre>
     const weightsEntropy = [0.0973, 0.1283, 0.0768, 0.0871, 0.0848, 0.1089, 0.2681, 0.0945, 0.0543];
 
     const vikorTop = [
-      { alt: 20, s: 0.3895, r: 0.0686, q: 0.3587, rank: 1 },
-      { alt: 6, s: 0.4262, r: 0.0661, q: 0.3763, rank: 2 },
-      { alt: 3, s: 0.4433, r: 0.0662, q: 0.3876, rank: 3 },
-      { alt: 12, s: 0.3550, r: 0.0932, q: 0.3975, rank: 4 },
-      { alt: 8, s: 0.4433, r: 0.0743, q: 0.4076, rank: 5 },
-      { alt: 7, s: 0.4694, r: 0.0704, q: 0.4148, rank: 6 },
-      { alt: 5, s: 0.4849, r: 0.0699, q: 0.4236, rank: 7 },
-      { alt: 18, s: 0.4539, r: 0.0779, q: 0.4237, rank: 8 },
-      { alt: 19, s: 0.3590, r: 0.1040, q: 0.4270, rank: 9 },
-      { alt: 15, s: 0.3150, r: 0.1380, q: 0.4822, rank: 10 }
+      { alt: "Klub Jagielloński", s: 0.3895, r: 0.0686, q: 0.3587, rank: 1 },
+      { alt: "Krytyka Polityczna", s: 0.4262, r: 0.0661, q: 0.3763, rank: 2 },
+      { alt: "Rzeczpospolita", s: 0.4433, r: 0.0662, q: 0.3876, rank: 3 },
+      { alt: "Interia.pl", s: 0.3550, r: 0.0932, q: 0.3975, rank: 4 },
+      { alt: "Dziennik Gazeta Prawna", s: 0.4433, r: 0.0743, q: 0.4076, rank: 5 },
+      { alt: "Onet.pl", s: 0.4694, r: 0.0704, q: 0.4148, rank: 6 },
+      { alt: "Wirtualna Polska", s: 0.4849, r: 0.0699, q: 0.4236, rank: 7 },
+      { alt: "Gazeta.pl", s: 0.4539, r: 0.0779, q: 0.4237, rank: 8 },
+      { alt: "Rzeczpospolita", s: 0.3590, r: 0.1040, q: 0.4270, rank: 9 },
+      { alt: "RMF24", s: 0.3150, r: 0.1380, q: 0.4822, rank: 10 }
     ];
 
     const metaRows = [
-      { alt: 20, topsis: 1, vikor: 1, waspas: 6, sum: 1, dominance: 1 },
-      { alt: 14, topsis: 6, vikor: 13, waspas: 1, sum: 2, dominance: 2 },
-      { alt: 6, topsis: 4, vikor: 2, waspas: 16, sum: 4, dominance: 3 },
-      { alt: 8, topsis: 2, vikor: 5, waspas: 15, sum: 5, dominance: 4 },
-      { alt: 19, topsis: 3, vikor: 9, waspas: 11, sum: 7, dominance: 5 },
-      { alt: 12, topsis: 5, vikor: 4, waspas: 14, sum: 6, dominance: 6 },
-      { alt: 3, topsis: 12, vikor: 3, waspas: 18, sum: 9, dominance: 7 },
-      { alt: 18, topsis: 7, vikor: 8, waspas: 19, sum: 11, dominance: 8 }
+      { alt: "Klub Jagielloński", topsis: 1, vikor: 1, waspas: 6, sum: 1, dominance: 1 },
+      { alt: "Krytyka Polityczna", topsis: 6, vikor: 13, waspas: 1, sum: 2, dominance: 2 },
+      { alt: "Rzeczpospolita", topsis: 4, vikor: 2, waspas: 16, sum: 4, dominance: 3 },
+      { alt: "Interia.pl", topsis: 2, vikor: 5, waspas: 15, sum: 5, dominance: 4 },
+      { alt: "Dziennik Gazeta Prawna", topsis: 3, vikor: 9, waspas: 11, sum: 7, dominance: 5 },
+      { alt: "Onet.pl", topsis: 5, vikor: 4, waspas: 14, sum: 6, dominance: 6 },
+      { alt: "Wirtualna Polska", topsis: 12, vikor: 3, waspas: 18, sum: 9, dominance: 7 },
+      { alt: "Gazeta.pl", topsis: 7, vikor: 8, waspas: 19, sum: 11, dominance: 8 }
     ];
 
     const gridColor = '#e5e7eb';
@@ -360,7 +386,7 @@ tabela_apa(wynik_vikor)</code></pre>
       data: {
         datasets: [{
           label: 'TFN dla oceny 6',
-          data: [{x: 4, y: 0}, {x: 5, y: 0}, {x: 6, y: 1}, {x: 7, y: 0}, {x: 8, y: 0}],
+          data: [{ x: 4, y: 0 }, { x: 5, y: 0 }, { x: 6, y: 1 }, { x: 7, y: 0 }, { x: 8, y: 0 }],
           borderColor: '#0369a1',
           backgroundColor: 'rgba(3, 105, 161, 0.14)',
           fill: true,
@@ -402,7 +428,7 @@ tabela_apa(wynik_vikor)</code></pre>
     new Chart(document.getElementById('vikorRankChart'), {
       type: 'bar',
       data: {
-        labels: vikorTop.map(row => 'A' + row.alt),
+        labels: vikorTop.map(row => row.alt),
         datasets: [{
           label: 'Q (niżej = lepiej)',
           data: vikorTop.map(row => row.q),
@@ -426,7 +452,7 @@ tabela_apa(wynik_vikor)</code></pre>
     metaRows.forEach(row => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td class="px-3 py-3 font-medium">A${row.alt}</td>
+        <td class="px-3 py-3 font-medium">${row.alt}</td>
         <td class="px-3 py-3">${row.topsis}</td>
         <td class="px-3 py-3">${row.vikor}</td>
         <td class="px-3 py-3">${row.waspas}</td>
@@ -459,4 +485,5 @@ tabela_apa(wynik_vikor)</code></pre>
     });
   </script>
 </body>
+
 </html>

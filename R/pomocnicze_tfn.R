@@ -59,6 +59,11 @@
 #' @title Walidacja typów kryteriów
 #' @keywords internal
 .sprawdz_typy_kryteriow <- function(typy_kryteriow, n_kryteriow) {
+  
+  if (length(typy_kryteriow) > n_kryteriow) {
+    typy_kryteriow <- typy_kryteriow[1:n_kryteriow]
+  }
+  
   if (length(typy_kryteriow) != n_kryteriow) {
     stop("Dlugosc 'typy_kryteriow' musi odpowiadac liczbie kryteriow.")
   }
