@@ -25,16 +25,25 @@
 #'
 #' @param x Obiekt klasy `rozmyty_vikor_wynik`.
 #' @param liczba_etykiet Liczba najlepszych alternatyw podpisywanych na wykresie.
+#' @param nazwy_alternatyw Opcjonalny wektor z własnymi nazwami mediów.
 #' @param ... Dodatkowe argumenty ignorowane przez metodę.
 #'
 #' @return Obiekt `ggplot`.
 #' @importFrom ggplot2 ggplot aes annotate coord_cartesian element_blank element_line element_text expansion geom_hline geom_point geom_vline labs margin scale_fill_manual scale_size_continuous scale_x_continuous scale_y_continuous theme theme_minimal
 #' @importFrom ggrepel geom_text_repel
 #' @export
-plot.rozmyty_vikor_wynik <- function(x, liczba_etykiet = 12, ...) {
+plot.rozmyty_vikor_wynik <- function(x, liczba_etykiet = 12, nazwy_alternatyw = NULL, ...) {
   df <- x$wyniki
   if (is.null(df) || !all(c("Def_S", "Def_R", "Def_Q", "Ranking") %in% names(df))) {
     stop("Obiekt 'x' nie zawiera wynikow VIKOR w oczekiwanym formacie.")
+  }
+  
+  if (!is.null(nazwy_alternatyw)) {
+    if (length(nazwy_alternatyw) == nrow(df)) {
+      df$Alternatywa <- nazwy_alternatyw
+    } else {
+      warning("Długość wektora 'nazwy_alternatyw' różni się od liczby wierszy. Użyto nazw domyślnych.")
+    }
   }
 
   q_zakres <- range(df$Def_Q, na.rm = TRUE)
@@ -74,7 +83,7 @@ plot.rozmyty_vikor_wynik <- function(x, liczba_etykiet = 12, ...) {
       min.segment.length = 0,
       box.padding = 0.6,
       point.padding = 0.4,
-      force = 3,
+      force = 4,
       seed = 42,
       max.overlaps = Inf,
       na.rm = TRUE
@@ -95,7 +104,7 @@ plot.rozmyty_vikor_wynik <- function(x, liczba_etykiet = 12, ...) {
       title = "Mapa kompromisu VIKOR",
       subtitle = "Lewe dolne pole wskazuje alternatywy o ni\u017cszym S i R; wi\u0119kszy b\u0105bel oznacza ni\u017cszy Q.",
       x = "U\u017cyteczno\u015b\u0107 grupowa S",
-      y = "Regret indywidualny R",
+      y = "\u017bal indywidualny R",
       fill = "Pozycja"
     ) +
     .motyw_mcda()
@@ -136,13 +145,14 @@ plot.fuzzy_vikor_res <- function(x, ...) {
 #'
 #' @param x Obiekt wynikowy z funkcji pakietu, np. `rozmyty_topsis_wynik`.
 #' @param tytul Opcjonalny tytul tabeli.
+#' #' @param nazwy_alternatyw Opcjonalny wektor z własnymi nazwami mediów.
 #' @param ... Dodatkowe argumenty przekazywane do metod S3.
 #'
 #' @return Obiekt klasy `flextable`.
 #' @importFrom rempsyc nice_table
 #' @importFrom flextable autofit save_as_docx
 #' @export
-tabela_apa <- function(x, tytul = NULL, ...) {
+tabela_apa <- function(x, tytul = NULL, nazwy_alternatyw = NULL, ...) {
   UseMethod("tabela_apa")
 }
 
@@ -175,8 +185,16 @@ tabela_apa.rozmyty_topsis_wynik <- function(x, tytul = "Wyniki metody Fuzzy TOPS
 }
 
 #' @export
-tabela_apa.rozmyty_vikor_wynik <- function(x, tytul = "Wyniki metody Fuzzy VIKOR", ...) {
+tabela_apa.rozmyty_vikor_wynik <- function(x, tytul = "Wyniki metody Fuzzy VIKOR",nazwy_alternatyw = NULL, ...) {
   df <- x$wyniki
+  if (!is.null(nazwy_alternatyw)) {
+    if (length(nazwy_alternatyw) == nrow(df)) {
+      df$Alternatywa <- nazwy_alternatyw[as.numeric(df$Alternatywa)]
+    } else {
+      warning("Długość wektora 'nazwy_alternatyw' różni się od liczby wierszy. Użyto nazw domyślnych.")
+    }
+  }
+  df <- df[order(df$Ranking), ]
   names(df) <- c("Alternatywa", "S (grupa)", "R (zal)", "Q (kompromis)", "Ranking")
 
   df[["S (grupa)"]] <- round(df[["S (grupa)"]], 3)
