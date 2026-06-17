@@ -81,14 +81,30 @@
 #'
 #' @param dane Ramka danych (data frame) zawierająca surowe zmienne.
 #' @param skladnia Ciąg znaków definiujący kryteria (np. "Koszt =~ k1 + k2").
+#'        Jeśli NULL, zostanie użyta domyślna składnia dla analizy clickbait (skladnia_clickbait).
 #' @param kolumna_alternatyw Nazwa kolumny identyfikującej alternatywy.
 #'        Jeśli NULL, każdy wiersz traktowany jest jako osobna alternatywa.
 #' @param funkcja_agregacji Funkcja używana do scalania opinii ekspertów (domyślnie: mean).
 #' @return Macierz o wymiarach `m x 3n`, gdzie `m` to liczba alternatyw.
 #' @export
-przygotuj_dane_mcda <- function(dane, skladnia, kolumna_alternatyw = NULL, funkcja_agregacji = mean) {
+#' @examples
+#' \dontrun{
+#' # Użycie domyślnej składni
+#' wynik <- przygotuj_dane_mcda(dane = moje_dane)
+#' 
+#' # Użycie niestandardowej składni
+#' moja_skladnia <- "Koszt =~ k1 + k2; Jakosc =~ j1 + j2"
+#' wynik <- przygotuj_dane_mcda(dane = moje_dane, skladnia = moja_skladnia)
+#' }
+przygotuj_dane_mcda <- function(dane, skladnia = NULL, kolumna_alternatyw = NULL, funkcja_agregacji = mean) {
   
   if (!is.data.frame(dane)) stop("Argument 'dane' musi byc ramka danych (data frame).")
+  
+  # Jeśli skladnia nie została podana, użyj domyślnej skladnia_clickbait
+  if (is.null(skladnia)) {
+    utils::data("skladnia_clickbait", envir = environment())
+    skladnia <- skladnia_clickbait
+  }
   
   # 1. Parsowanie składni
   mapowanie <- .parsuj_skladnie_mcda(skladnia)
