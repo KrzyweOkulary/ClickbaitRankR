@@ -94,10 +94,39 @@ rozmyty_vikor <- function(macierz_decyzyjna, typy_kryteriow, v = 0.5,
     Ranking = rank(def_Q, ties.method = "first"),
     row.names = NULL
   )
+  
+  n_alternatyw <- nrow(ramka_wynikow)
+  tabela_sort <- ramka_wynikow[order(ramka_wynikow$Ranking), ]
+  
+  q1 <- tabela_sort$Def_Q[1]
+  q2 <- tabela_sort$Def_Q[2]
+  dq <- 1 / (n_alternatyw - 1)
+  
+  warunek_u1 <- (q2 - q1) >= dq
+  
+  najlepsza_s <- tabela_sort$Alternatywa[which.min(tabela_sort$Def_S)]
+  najlepsza_r <- tabela_sort$Alternatywa[which.min(tabela_sort$Def_R)]
+  lider <- tabela_sort$Alternatywa[1]
+  
+  warunek_u2 <- (lider == najlepsza_s) || (lider == najlepsza_r)
+  
+  kompromis <- list()
+  if (warunek_u1 && warunek_u2) {
+    kompromis$rozwiazanie <- lider
+    kompromis$komunikat <- "Wyłoniono stabilne rozwiązanie kompromisowe."
+  } else if (!warunek_u1 && warunek_u2) {
+    zbiór_mediow <- tabela_sort$Alternatywa[tabela_sort$Def_Q - q1 < dq]
+    kompromis$rozwiazanie <- zbiór_mediow
+    kompromis$komunikat <- "Brak akceptowalnej przewagi. Wyznaczono zbiór kompromisowy."
+  } else {
+    kompromis$rozwiazanie <- c(lider, tabela_sort$Alternatywa[2])
+    kompromis$komunikat <- "Brak stabilności decyzji. Rozwiązanie obejmuje lidera i drugą alternatywę."
+  }
 
   wynik <- list(
     wyniki = ramka_wynikow,
     detale = list(S_rozmyte = S_rozmyte, R_rozmyte = R_rozmyte, Q_rozmyte = Q_rozmyte),
+    stabilnosc = list(U1_Przewaga = warunek_u1, U2_Stabilnosc = warunek_u2, decyzja = kompromis),
     parametry = list(
       metoda = "VIKOR",
       v = v,
