@@ -46,7 +46,7 @@ fuzzy_meta_ranking <- function(decision_mat, criteria_types, weights = NULL,
     "Onet.pl", "Wirtualna Polska", "Interia.pl", "Gazeta.pl", "Rzeczpospolita",
     "TVN24", "Defence24", "InfoSecurity24", "Dziennik Gazeta Prawna", "Polityka",
     "Newsweek", "wPolityce.pl", "Niezalezna.pl", "Krytyka Polityczna", "Klub Jagielloński",
-    "OKO.press", "RMF24", "Radio ZET", "Polsat News", "GeopolitiX"
+    "OKO.press", "RMF24", "Radio ZET", "Polsat News", "xyz.pl"
   )
   if (nrow(decision_mat) == length(nazwy_mediow)) {
     rownames(decision_mat) <- nazwy_mediow

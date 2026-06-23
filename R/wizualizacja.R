@@ -52,10 +52,14 @@ plot.rozmyty_vikor_wynik <- function(x, liczba_etykiet = 12, nazwy_alternatyw = 
   } else {
     df$Sila_kompromisu <- 1 - ((df$Def_Q - q_zakres[1]) / (q_zakres[2] - q_zakres[1]))
   }
+  
+  liderzy <- x$stabilnosc$decyzja$rozwiazanie
+  n_liderow <- length(liderzy)
+  maks_ranga_czolowki <- n_liderow + 1
 
   df$Grupa <- "Pozosta\u0142e"
-  df$Grupa[df$Ranking <= 3] <- "Czo\u0142\u00f3wka"
-  df$Grupa[df$Ranking == 1] <- "Najlepsza"
+  df$Grupa[df$Ranking <= maks_ranga_czolowki] <- "Czo\u0142\u00f3wka"
+  df$Grupa[df$Alternatywa %in% liderzy] <- "Najlepsza"
   df$Grupa <- factor(df$Grupa, levels = c("Najlepsza", "Czo\u0142\u00f3wka", "Pozosta\u0142e"))
 
   liczba_etykiet <- min(max(1, liczba_etykiet), nrow(df))
@@ -172,8 +176,8 @@ tabela_apa.rozmyty_topsis_wynik <- function(x, tytul = "Wyniki metody Fuzzy TOPS
   df <- x$wyniki
   names(df) <- c("Alternatywa", "D+ (do idealu)", "D- (od antyidealu)", "Wynik (CC)", "Ranking")
 
-  df[["D+ (do idealu)"]] <- round(df[["D+ (do idealu)"]], 3)
-  df[["D- (od antyidealu)"]] <- round(df[["D- (od antyidealu)"]], 3)
+  df[["D+ (do idealu)"]] <- round(df[["D+ (do idealu)"]], 4)
+  df[["D- (od antyidealu)"]] <- round(df[["D- (od antyidealu)"]], 4)
   df[["Wynik (CC)"]] <- round(df[["Wynik (CC)"]], 4)
 
   .utworz_tabele_apa(
@@ -197,8 +201,8 @@ tabela_apa.rozmyty_vikor_wynik <- function(x, tytul = "Wyniki metody Fuzzy VIKOR
   df <- df[order(df$Ranking), ]
   names(df) <- c("Alternatywa", "S (grupa)", "R (zal)", "Q (kompromis)", "Ranking")
 
-  df[["S (grupa)"]] <- round(df[["S (grupa)"]], 3)
-  df[["R (zal)"]] <- round(df[["R (zal)"]], 3)
+  df[["S (grupa)"]] <- round(df[["S (grupa)"]], 4)
+  df[["R (zal)"]] <- round(df[["R (zal)"]], 4)
   df[["Q (kompromis)"]] <- round(df[["Q (kompromis)"]], 4)
 
   .utworz_tabele_apa(
@@ -230,8 +234,8 @@ tabela_apa.rozmyty_waspas_wynik <- function(x, tytul = "Wyniki metody Fuzzy WASP
   df <- x$wyniki
   names(df) <- c("Alternatywa", "WSM (suma)", "WPM (iloczyn)", "Q (laczny)", "Ranking")
 
-  df[["WSM (suma)"]] <- round(df[["WSM (suma)"]], 3)
-  df[["WPM (iloczyn)"]] <- round(df[["WPM (iloczyn)"]], 3)
+  df[["WSM (suma)"]] <- round(df[["WSM (suma)"]], 4)
+  df[["WPM (iloczyn)"]] <- round(df[["WPM (iloczyn)"]], 4)
   df[["Q (laczny)"]] <- round(df[["Q (laczny)"]], 4)
 
   .utworz_tabele_apa(

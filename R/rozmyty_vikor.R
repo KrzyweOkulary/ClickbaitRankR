@@ -24,6 +24,8 @@ rozmyty_vikor <- function(macierz_decyzyjna, typy_kryteriow, v = 0.5,
   n_kolumn <- ncol(macierz_decyzyjna)
   n_kryteriow <- n_kolumn / 3
   typy_rozmyte <- .rozszerz_typy_kryteriow(typy_kryteriow, n_kryteriow)
+  
+
   finalne_wagi <- .pobierz_finalne_wagi(macierz_decyzyjna, typy_kryteriow, metoda_wag, wagi)
 
   ideal_poz <- ifelse(
@@ -67,23 +69,27 @@ rozmyty_vikor <- function(macierz_decyzyjna, typy_kryteriow, v = 0.5,
   R_rozmyte[, 1] <- apply(macierz_wazona_d[, seq(1, n_kolumn, 3), drop = FALSE], 1, max)
   R_rozmyte[, 2] <- apply(macierz_wazona_d[, seq(2, n_kolumn, 3), drop = FALSE], 1, max)
   R_rozmyte[, 3] <- apply(macierz_wazona_d[, seq(3, n_kolumn, 3), drop = FALSE], 1, max)
+  
+  
+  def_S <- .defuzyfikuj_tfn(S_rozmyte[, 1], S_rozmyte[, 2], S_rozmyte[, 3])
+  def_R <- .defuzyfikuj_tfn(R_rozmyte[, 1], R_rozmyte[, 2], R_rozmyte[, 3])
+ 
 
-  s_star <- min(S_rozmyte[, 1])
-  s_minus <- max(S_rozmyte[, 3])
-  r_star <- min(R_rozmyte[, 1])
-  r_minus <- max(R_rozmyte[, 3])
-
+  s_star <- min(def_S)
+  s_minus <- max(def_S)
+  r_star <- min(def_R)
+  r_minus <- max(def_R)
+  
+  
   mianownik_s <- s_minus - s_star
   mianownik_r <- r_minus - r_star
   if (mianownik_s == 0) mianownik_s <- 1
   if (mianownik_r == 0) mianownik_r <- 1
-
+  
   czlon_s <- (S_rozmyte - s_star) / mianownik_s
   czlon_r <- (R_rozmyte - r_star) / mianownik_r
   Q_rozmyte <- v * czlon_s + (1 - v) * czlon_r
 
-  def_S <- .defuzyfikuj_tfn(S_rozmyte[, 1], S_rozmyte[, 2], S_rozmyte[, 3])
-  def_R <- .defuzyfikuj_tfn(R_rozmyte[, 1], R_rozmyte[, 2], R_rozmyte[, 3])
   def_Q <- .defuzyfikuj_tfn(Q_rozmyte[, 1], Q_rozmyte[, 2], Q_rozmyte[, 3])
 
   ramka_wynikow <- data.frame(
@@ -115,7 +121,7 @@ rozmyty_vikor <- function(macierz_decyzyjna, typy_kryteriow, v = 0.5,
     kompromis$rozwiazanie <- lider
     kompromis$komunikat <- "Wyłoniono stabilne rozwiązanie kompromisowe."
   } else if (!warunek_u1 && warunek_u2) {
-    zbiór_mediow <- tabela_sort$Alternatywa[tabela_sort$Def_Q - q1 < dq]
+    zbiór_mediow <- tabela_sort$Alternatywa[tabela_sort$Def_Q - q1 <= dq]
     kompromis$rozwiazanie <- zbiór_mediow
     kompromis$komunikat <- "Brak akceptowalnej przewagi. Wyznaczono zbiór kompromisowy."
   } else {
