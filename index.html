@@ -253,7 +253,7 @@
             class="rounded bg-slate-100 px-1 py-0.5">plot(wynik_vikor)</code>.
           Lepsze alternatywy są bliżej dolnego obszaru i mają większe bąble.
         </p>
-        <img class="mt-5 w-full rounded border border-slate-200 bg-white" src="man/figures/README-vikor-plot.png"
+        <img class="mt-5 w-full rounded border border-slate-200 bg-white" src="man/figures/vikor-plot.png"
           alt="Mapa kompromisu VIKOR wygenerowana przez pakiet ClickbaitRankR">
       </div>
     </section>
@@ -265,7 +265,7 @@
         <code class="rounded bg-slate-100 px-1 py-0.5">tabela_apa(wynik_vikor)</code>, pokazany tutaj dla 10 najlepszych
         alternatyw.
       </p>
-      <img class="mt-5 w-full rounded border border-slate-200 bg-white" src="man/figures/README-vicor-apa-table.PNG"
+      <img class="mt-5 w-full rounded border border-slate-200 bg-white" src="man/figures/vikor-apa-table.PNG"
         alt="Tabela APA z wynikami Fuzzy VIKOR">
     </section>
 
@@ -314,16 +314,17 @@
       </p>
       <pre class="mt-5 overflow-x-auto rounded bg-slate-950 p-5 text-sm leading-6 text-slate-100"><code>devtools::install_github("KrzyweOkulary/ClickbaitRankR")
 library(ClickbaitRankR)
-data(skladnia_clickbait)
 data("mcda_dane_surowe")
+data(skladnia_clickbait)
+typy_kryteriow <- c("max", "min", "max", "max", "min", "min", "max", "min", "min")
 
 macierz_tfn <- przygotuj_dane_mcda(
   dane = mcda_dane_surowe,
   skladnia = skladnia_clickbait,
   kolumna_alternatyw = "Alternatywa"
 )
-
 rownames(macierz_tfn) <- pobierz_nazwy_serwisow()
+
 wynik_vikor <- rozmyty_vikor(
   macierz_decyzyjna = macierz_tfn,
   typy_kryteriow = typy_kryteriow,
@@ -343,9 +344,10 @@ tabela_apa(wynik_vikor)
 
   <footer class="mt-12 border-t border-slate-200 bg-white px-4 py-8 text-center text-sm text-slate-500">
     Autorem niniejszego serwisu jest Katarzyna Krzystanek.
-Serwis ten stanowi integralną część pracy licencjackiej (kierunek: elektroniczne
-przetwarzanie informacji), przygotowanej pod kierunkiem dr Marka Dei na Wydziale Zarządzania i Komunikacji Społecznej
-Uniwersytetu Jagiellońskiego
+    Serwis ten stanowi integralną część pracy licencjackiej (kierunek: elektroniczne
+    przetwarzanie informacji), przygotowanej pod kierunkiem dr Marka Dei na Wydziale Zarządzania i Komunikacji
+    Społecznej
+    Uniwersytetu Jagiellońskiego
   </footer>
 
   <script>
@@ -358,27 +360,29 @@ Uniwersytetu Jagiellońskiego
 
 
     const vikorTop = [
-      { alt: "Klub Jagielloński", s: 0.3895, r: 0.0686, q: 0.3587, rank: 1 },
-      { alt: "Krytyka Polityczna", s: 0.4262, r: 0.0661, q: 0.3763, rank: 2 },
-      { alt: "Rzeczpospolita", s: 0.4433, r: 0.0662, q: 0.3876, rank: 3 },
-      { alt: "Interia.pl", s: 0.3550, r: 0.0932, q: 0.3975, rank: 4 },
-      { alt: "Dziennik Gazeta Prawna", s: 0.4433, r: 0.0743, q: 0.4076, rank: 5 },
-      { alt: "Onet.pl", s: 0.4694, r: 0.0704, q: 0.4148, rank: 6 },
-      { alt: "Wirtualna Polska", s: 0.4849, r: 0.0699, q: 0.4236, rank: 7 },
-      { alt: "Gazeta.pl", s: 0.4539, r: 0.0779, q: 0.4237, rank: 8 },
-      { alt: "Rzeczpospolita", s: 0.3590, r: 0.1040, q: 0.4270, rank: 9 },
-      { alt: "RMF24", s: 0.3150, r: 0.1380, q: 0.4822, rank: 10 }
-    ];
+      { alt: "xyz.pl", s: 0.3895, r: 0.0686, q: 0.2502, rank: 1 },
+      { alt: "Polityka", s: 0.3550, r: 0.0932, q: 0.2605, rank: 2 },
+      { alt: "Polsat News", s: 0.3587, r: 0.1041, q: 0.3169, rank: 3 },
+      { alt: "Defence24", s: 0.4262, r: 0.0661, q: 0.3398, rank: 4 },
+      { alt: "Dziennik Gazeta Prawna", s: 0.3155, r: 0.1376, q: 0.3413, rank: 5 },
+      { alt: "Do Rzeczy", s: 0.3016, r: 0.1520, q: 0.3646, rank: 6 },
+      { alt: "Interia.pl", s: 0.4433, r: 0.0662, q: 0.3869, rank: 7 },
+      { alt: "Onet.pl", s: 0.4433, r: 0.0743, q: 0.4210, rank: 8 },
+      { alt: "Radio ZET", s: 0.3617, r: 0.1304, q: 0.4367, rank: 9 },
+      { alt: "Niezalezna.pl", s: 0.3731, r: 0.1232, q: 0.4372, rank: 10 }
+    ]
 
     const metaRows = [
-      { alt: "Klub Jagielloński", topsis: 1, vikor: 1, waspas: 6, sum: 1, dominance: 1 },
-      { alt: "Krytyka Polityczna", topsis: 6, vikor: 13, waspas: 1, sum: 2, dominance: 2 },
-      { alt: "Rzeczpospolita", topsis: 4, vikor: 2, waspas: 16, sum: 4, dominance: 3 },
-      { alt: "Interia.pl", topsis: 2, vikor: 5, waspas: 15, sum: 5, dominance: 4 },
-      { alt: "Dziennik Gazeta Prawna", topsis: 3, vikor: 9, waspas: 11, sum: 7, dominance: 5 },
-      { alt: "Onet.pl", topsis: 5, vikor: 4, waspas: 14, sum: 6, dominance: 6 },
-      { alt: "Wirtualna Polska", topsis: 12, vikor: 3, waspas: 18, sum: 9, dominance: 7 },
-      { alt: "Gazeta.pl", topsis: 7, vikor: 8, waspas: 19, sum: 11, dominance: 8 }
+      { alt: "xyz.pl", topsis: 1, vikor: 1, waspas: 6, sum: 1, dominance: 1 },
+      { alt: "Krytyka Polityczna", topsis: 6, vikor: 6, waspas: 1, sum: 2, dominance: 2 },
+      { alt: "wPolityce.pl", topsis: 5, vikor: 2, waspas: 14, sum: 5, dominance: 3 },
+      { alt: "Polsat News", topsis: 3, vikor: 3, waspas: 11, sum: 4, dominance: 4 },
+      { alt: "TVN24", topsis: 4, vikor: 4, waspas: 16, sum: 6, dominance: 5 },
+      { alt: "Klub Jagielloński", topsis: 8, vikor: 5, waspas: 3, sum: 3, dominance: 6 },
+      { alt: "InfoSecurity24", topsis: 2, vikor: 8, waspas: 15, sum: 7, dominance: 7 },
+      { alt: "Wirtualna Polska", topsis: 15, vikor: 17, waspas: 2, sum: 9, dominance: 8 },
+      { alt: "Interia.pl", topsis: 12, vikor: 7, waspas: 18, sum: 11, dominance: 9 },
+      { alt: "Onet.pl", topsis: 13, vikor: 9, waspas: 7, sum: 8, dominance: 10 }
     ];
 
     const gridColor = '#e5e7eb';
@@ -471,7 +475,7 @@ Uniwersytetu Jagiellońskiego
         labels: ['TOPSIS z VIKOR', 'WASPAS z VIKOR', 'Meta Sum z VIKOR', 'Dominance z VIKOR'],
         datasets: [{
           label: 'Korelacja Spearmana',
-          data: [0.808, -0.621, 0.695, 0.820],
+          data: [0.868, -0.165, 0.863, 0.908],
           backgroundColor: ['#0369a1', '#be123c', '#0f766e', '#059669'],
           borderRadius: 4
         }]
