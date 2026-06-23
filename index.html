@@ -323,6 +323,7 @@ macierz_tfn <- przygotuj_dane_mcda(
   kolumna_alternatyw = "Alternatywa"
 )
 
+rownames(macierz_tfn) <- pobierz_nazwy_serwisow()
 wynik_vikor <- rozmyty_vikor(
   macierz_decyzyjna = macierz_tfn,
   typy_kryteriow = typy_kryteriow,
@@ -330,7 +331,9 @@ wynik_vikor <- rozmyty_vikor(
 )
       
 plot(wynik_vikor, liczba_etykiet = 20)
-tabela_apa(wynik_vikor)</code></pre>
+tabela_apa(wynik_vikor)
+
+</code></pre>
       <p class="mt-4 text-sm text-slate-500">
         Pełny skrypt testowy znajduje się w <code
           class="rounded bg-slate-100 px-1 py-0.5">data-raw/sprawdz_dgp_i_funkcje.R</code>.
