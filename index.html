@@ -69,7 +69,7 @@
         <div class="mt-6 grid gap-3 sm:grid-cols-3">
           <div class="rounded border border-slate-200 bg-slate-50 p-4">
             <p class="text-xs font-semibold uppercase text-slate-500">Dane</p>
-            <p class="mt-2 text-2xl font-bold text-slate-950">30</p>
+            <p class="mt-2 text-2xl font-bold text-slate-950">20</p>
             <p class="text-sm text-slate-600">alternatyw w demonstracji</p>
           </div>
           <div class="rounded border border-slate-200 bg-slate-50 p-4">
@@ -92,13 +92,9 @@
         </p>
         <div class="mt-5 rounded border border-emerald-200 bg-emerald-50 p-5">
           <p class="text-xs font-bold uppercase tracking-wide text-emerald-700">Najlepszy kompromis</p>
-          <p class="mt-2 text-5xl font-extrabold text-emerald-950">"Klub Jagielloński"</p>
-          <p class="mt-2 text-sm text-emerald-800">najniższy indeks kompromisu Q = 0.3587</p>
+          <p class="mt-2 text-5xl font-extrabold text-emerald-950">"xyz.pl"</p>
+          <p class="mt-2 text-sm text-emerald-800">najniższy indeks kompromisu Q = 0.36</p>
         </div>
-        <p class="mt-5 text-sm leading-6 text-slate-600">
-          Ten dashboard jest statyczną stroną GitHub Pages: pokazuje wyniki wygenerowane przez pakiet, bez uruchamiania
-          R w przeglądarce.
-        </p>
       </aside>
     </section>
 
@@ -269,7 +265,7 @@
         <code class="rounded bg-slate-100 px-1 py-0.5">tabela_apa(wynik_vikor)</code>, pokazany tutaj dla 10 najlepszych
         alternatyw.
       </p>
-      <img class="mt-5 w-full rounded border border-slate-200 bg-white" src="man/figures/README-vikor-table.png"
+      <img class="mt-5 w-full rounded border border-slate-200 bg-white" src="man/figures/README-vicor-apa-table.PNG"
         alt="Tabela APA z wynikami Fuzzy VIKOR">
     </section>
 
@@ -318,7 +314,7 @@
       </p>
       <pre class="mt-5 overflow-x-auto rounded bg-slate-950 p-5 text-sm leading-6 text-slate-100"><code>devtools::install_github("KrzyweOkulary/ClickbaitRankR")
 library(ClickbaitRankR)
-
+data(skladnia_clickbait)
 data("mcda_dane_surowe")
 
 macierz_tfn <- przygotuj_dane_mcda(
@@ -352,7 +348,8 @@ tabela_apa(wynik_vikor)</code></pre>
       'Sensacyjnosc', 'Zbalansowanie', 'Manipulacja faktami', 'Manipulacja wizualna'
     ];
     const weightsCritic = [0.0865, 0.2321, 0.1518, 0.0815, 0.0823, 0.0883, 0.1064, 0.0895, 0.0816];
-    const weightsEntropy = [0.0973, 0.1283, 0.0768, 0.0871, 0.0848, 0.1089, 0.2681, 0.0945, 0.0543];
+    const weightsEntropy = [0.0926, 0.0888, 0.0732, 0.0829, 0.0963, 0.1105, 0.2554, 0.1207, 0.0797];
+
 
     const vikorTop = [
       { alt: "Klub Jagielloński", s: 0.3895, r: 0.0686, q: 0.3587, rank: 1 },
