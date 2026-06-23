@@ -82,11 +82,11 @@
 #' @title Nazwy alternatyw z macierzy decyzyjnej
 #' @keywords internal
 .nazwy_alternatyw <- function(macierz_decyzyjna) {
-  nazwy <- rownames(macierz_decyzyjna)
-  if (is.null(nazwy)) {
-    nazwy <- as.character(seq_len(nrow(macierz_decyzyjna)))
+  if (!is.null(rownames(macierz_decyzyjna))) {
+    return(rownames(macierz_decyzyjna))
+  } else {
+    return(as.character(1:nrow(macierz_decyzyjna)))
   }
-  nazwy
 }
 
 #' @title Bezpieczna normalizacja do przedziału [0, 1]
